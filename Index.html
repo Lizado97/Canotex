@@ -534,251 +534,187 @@
       actualizarResumen();
     }
 
-    function actualizarItemsList() {
-      const card = document.getElementById('itemsCard');
-      const list = document.getElementById('itemsList');
-      
+        actualizarItems();
+      limpiarFormularioCortina();
+    }
+
+    function actualizarItems() {
+      const itemsList = document.getElementById('itemsList');
+      const itemsCard = document.getElementById('itemsCard');
+
       if (items.length === 0) {
-        card.style.display = 'none';
+        itemsCard.style.display = 'none';
         return;
       }
 
-      card.style.display = 'block';
-      list.innerHTML = items.map((item, index) => `
+      itemsCard.style.display = 'block';
+
+      itemsList.innerHTML = items.map(item => `
         <div class="item-card">
           <div class="item-info">
-            <div class="item-title">#${index + 1} - ${item.descripcion}</div>
+            <div class="item-title">${item.descripcion}</div>
             <div class="item-details">
-              Medidas: ${item.ancho}cm x ${item.alto}cm${item.dos_piezas ? ' (2 piezas)' : ''}${item.incluye_instalacion ? ' 🔧' : ''}
-              <br>Sistema: ${item.sistema_nombre}
+              ${item.ancho}cm x ${item.alto}cm — ${item.sistema_nombre}
+              ${item.dos_piezas ? ' — 2 piezas' : ''}
+              ${item.incluye_instalacion ? ' — Instalación' : ''}
             </div>
           </div>
           <div class="item-actions">
             <span class="item-price">${item.precio_total.toFixed(2)}€</span>
-            <button class="btn btn-danger" onclick="eliminarItem(${item.id})">🗑️</button>
+            <button class="btn btn-danger" onclick="eliminarItem(${item.id})">✖</button>
           </div>
         </div>
       `).join('');
+
+      actualizarResumen();
+    }
+
+    function eliminarItem(id) {
+      items = items.filter(i => i.id !== id);
+      actualizarItems();
     }
 
     function actualizarResumen() {
-      const subtotal = items.reduce((sum, item) => sum + item.precio_total, 0);
+      const totalItems = items.length;
+      const subtotal = items.reduce((sum, i) => sum + i.precio_total, 0);
       const iva = subtotal * 0.21;
       const total = subtotal + iva;
 
-      document.getElementById('totalItems').textContent = items.length;
+      document.getElementById('totalItems').textContent = totalItems;
       document.getElementById('subtotal').textContent = subtotal.toFixed(2) + '€';
       document.getElementById('iva').textContent = iva.toFixed(2) + '€';
       document.getElementById('total').textContent = total.toFixed(2) + '€';
     }
 
+    function limpiarFormularioCortina() {
+      document.getElementById('tipoCortina').value = '';
+      document.getElementById('tejidoNombre').value = '';
+      document.getElementById('ancho').value = '';
+      document.getElementById('alto').value = '';
+      document.getElementById('sistemaNombre').value = '';
+      document.getElementById('dosPiezas').checked = false;
+      document.getElementById('incluirInstalacion').checked = false;
+      tejidoSeleccionado = null;
+    }
+
     function guardarPresupuesto() {
       const clienteNombre = document.getElementById('clienteNombre').value;
-      if (!clienteNombre) {
-        alert('Por favor ingresa el nombre del cliente');
+      if (!clienteNombre || items.length === 0) {
+        alert('El presupuesto debe tener cliente y al menos un ítem.');
         return;
       }
-      if (items.length === 0) {
-        alert('Agrega al menos un item al presupuesto');
-        return;
-      }
-
-      const subtotal = items.reduce((sum, item) => sum + item.precio_total, 0);
-      const total = subtotal * 1.21;
-
-      const nuevoNumero = String(presupuestos.length + 1).padStart(4, '0');
 
       const presupuesto = {
         id: Date.now(),
-        numero: nuevoNumero,
-        cliente_nombre: clienteNombre,
-        cliente_telefono: document.getElementById('clienteTelefono').value,
-        cliente_email: document.getElementById('clienteEmail').value,
-        cliente_direccion: document.getElementById('clienteDireccion').value,
-        fecha: new Date().toISOString().split('T')[0],
+        numero: 'P-' + (presupuestos.length + 1).toString().padStart(3, '0'),
+        fecha: new Date().toLocaleDateString(),
+        cliente: {
+          nombre: clienteNombre,
+          telefono: document.getElementById('clienteTelefono').value,
+          email: document.getElementById('clienteEmail').value,
+          direccion: document.getElementById('clienteDireccion').value
+        },
+        notas: document.getElementById('notas').value,
         items: [...items],
-        total_sin_iva: subtotal,
-        total_con_iva: total,
-        notas: document.getElementById('notas').value
+        subtotal: items.reduce((s, i) => s + i.precio_total, 0),
+        iva: items.reduce((s, i) => s + i.precio_total, 0) * 0.21,
+        total: items.reduce((s, i) => s + i.precio_total, 0) * 1.21
       };
 
       presupuestos.push(presupuesto);
       localStorage.setItem('presupuestos', JSON.stringify(presupuestos));
 
-      items = [];
-      document.getElementById('clienteNombre').value = '';
-      document.getElementById('clienteTelefono').value = '';
-      document.getElementById('clienteEmail').value = '';
-      document.getElementById('clienteDireccion').value = '';
-      document.getElementById('notas').value = '';
-      limpiarFormulario();
-      actualizarItemsList();
-      actualizarResumen();
-
-      alert('¡Presupuesto guardado con éxito!');
       mostrarDashboard();
+      actualizarDashboard();
+    }
+
+    function actualizarDashboard() {
+      const total = presupuestos.length;
+      const importeTotal = presupuestos.reduce((s, p) => s + p.total, 0);
+
+      const mesActual = new Date().getMonth() + 1;
+      const presupuestosEsteMes = presupuestos.filter(p => {
+        const partes = p.fecha.split('/');
+        return parseInt(partes[1]) === mesActual;
+      }).length;
+
+      document.getElementById('totalPresupuestos').textContent = total;
+      document.getElementById('importeTotal').textContent = importeTotal.toFixed(2) + '€';
+      document.getElementById('presupuestosEsteMes').textContent = presupuestosEsteMes;
+
+      const tabla = document.getElementById('presupuestosTable');
+
+      if (presupuestos.length === 0) {
+        tabla.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#64748b;">No hay presupuestos. ¡Crea el primero!</td></tr>';
+        return;
+      }
+
+      tabla.innerHTML = presupuestos.map(p => `
+        <tr onclick="verPresupuesto(${p.id})">
+          <td>${p.numero}</td>
+          <td>${p.cliente.nombre}</td>
+          <td>${p.fecha}</td>
+          <td>${p.items.length}</td>
+          <td style="text-align:right;">${p.total.toFixed(2)}€</td>
+          <td style="text-align:center;"><span class="badge badge-blue">Ver</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function verPresupuesto(id) {
+      const p = presupuestos.find(p => p.id === id);
+      presupuestoActual = p;
+
+      document.getElementById('dashboardView').classList.add('hidden');
+      document.getElementById('nuevoPresupuestoView').classList.add('hidden');
+      document.getElementById('detallePresupuestoView').classList.remove('hidden');
+
+      document.getElementById('presupuestoContent').innerHTML = generarHTMLPresupuesto(p);
+    }
+
+    function generarHTMLPresupuesto(p) {
+      return `
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Presupuesto ${p.numero}</h2>
+          </div>
+          <div class="card-content">
+            <p><strong>Cliente:</strong> ${p.cliente.nombre}</p>
+            <p><strong>Fecha:</strong> ${p.fecha}</p>
+            <hr style="margin:15px 0;">
+            ${p.items.map(i => `
+              <p><strong>${i.descripcion}</strong> — ${i.ancho}×${i.alto} cm — ${i.precio_total.toFixed(2)}€</p>
+            `).join('')}
+            <hr style="margin:15px 0;">
+            <p>Subtotal: ${p.subtotal.toFixed(2)}€</p>
+            <p>IVA 21%: ${p.iva.toFixed(2)}€</p>
+            <h3>Total: ${p.total.toFixed(2)}€</h3>
+            <p style="margin-top:10px; white-space:pre-line;">${p.notas || ''}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function mostrarNuevoPresupuesto() {
+      items = [];
+      tejidoSeleccionado = null;
+      presupuestoActual = null;
+
+      document.getElementById('dashboardView').classList.add('hidden');
+      document.getElementById('detallePresupuestoView').classList.add('hidden');
+      document.getElementById('nuevoPresupuestoView').classList.remove('hidden');
+
+      document.getElementById('itemsCard').style.display = 'none';
     }
 
     function mostrarDashboard() {
       document.getElementById('dashboardView').classList.remove('hidden');
       document.getElementById('nuevoPresupuestoView').classList.add('hidden');
       document.getElementById('detallePresupuestoView').classList.add('hidden');
-      actualizarDashboard();
-    }
-
-    function mostrarNuevoPresupuesto() {
-      document.getElementById('dashboardView').classList.add('hidden');
-      document.getElementById('nuevoPresupuestoView').classList.remove('hidden');
-      document.getElementById('detallePresupuestoView').classList.add('hidden');
-    }
-
-    function actualizarDashboard() {
-      const total = presupuestos.length;
-      const importe = presupuestos.reduce((sum, p) => sum + p.total_con_iva, 0);
-      const mesActual = new Date().getMonth();
-      const esteMes = presupuestos.filter(p => new Date(p.fecha).getMonth() === mesActual).length;
-
-      document.getElementById('totalPresupuestos').textContent = total;
-      document.getElementById('importeTotal').textContent = Math.round(importe) + '€';
-      document.getElementById('presupuestosEsteMes').textContent = esteMes;
-
-      const tbody = document.getElementById('presupuestosTable');
-      if (presupuestos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px; color: #64748b;">No hay presupuestos. ¡Crea el primero!</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = presupuestos.map(p => `
-        <tr onclick="verPresupuesto('${p.id}')">
-          <td>${p.numero}</td>
-          <td>${p.cliente_nombre}</td>
-          <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
-          <td>${p.items.length}</td>
-          <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
-          <td style="text-align: center;">
-            <button class="btn btn-danger" onclick="event.stopPropagation(); eliminarPresupuesto('${p.id}')">🗑️</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function eliminarPresupuesto(id) {
-      if (!confirm('¿Estás seguro de eliminar este presupuesto?')) return;
-      presupuestos = presupuestos.filter(p => p.id != id);
-      localStorage.setItem('presupuestos', JSON.stringify(presupuestos));
-      actualizarDashboard();
-    }
-
-    function verPresupuesto(id) {
-      presupuestoActual = presupuestos.find(p => p.id == id);
-      if (!presupuestoActual) return;
-
-      document.getElementById('dashboardView').classList.add('hidden');
-      document.getElementById('nuevoPresupuestoView').classList.add('hidden');
-      document.getElementById('detallePresupuestoView').classList.remove('hidden');
-
-      const content = document.getElementById('presupuestoContent');
-      content.innerHTML = `
-        <div class="card">
-          <div class="card-content" style="padding: 40px;">
-            <div style="background: #fef3c7; border: 2px solid #fbbf24; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
-              <p style="font-weight: bold; color: #78350f; font-size: 1.1rem;">⚠️ PRESUPUESTO ORIENTATIVO</p>
-              <p style="font-size: 0.9rem; color: #92400e; margin-top: 10px;">
-                Los precios y cantidades aquí indicados son aproximados y están sujetos a confirmación tras toma de medidas definitiva.
-              </p>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #e2e8f0;">
-              <div>
-                <h1 style="font-size: 2rem; font-weight: bold; color: #2563eb; margin-bottom: 10px;">Canotex</h1>
-                <p style="color: #64748b; font-size: 0.9rem;">Tel: 973235776</p>
-                <p style="color: #64748b; font-size: 0.9rem;">info@canotex.es</p>
-              </div>
-              <div style="text-align: right;">
-                <h2 style="font-size: 1.5rem; font-weight: bold; color: #2563eb; margin-bottom: 10px;">PRESUPUESTO</h2>
-                <p style="color: #64748b;">Nº: ${presupuestoActual.numero}</p>
-                <p style="color: #64748b;">Fecha: ${new Date(presupuestoActual.fecha).toLocaleDateString('es-ES')}</p>
-              </div>
-            </div>
-
-            <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
-              <h3 style="font-weight: 600; margin-bottom: 10px; color: #1e293b;">Cliente</h3>
-              <p style="font-weight: bold; color: #1e293b; margin-bottom: 5px;">${presupuestoActual.cliente_nombre}</p>
-              ${presupuestoActual.cliente_telefono ? `<p style="color: #64748b; font-size: 0.9rem;">Tel: ${presupuestoActual.cliente_telefono}</p>` : ''}
-              ${presupuestoActual.cliente_email ? `<p style="color: #64748b; font-size: 0.9rem;">Email: ${presupuestoActual.cliente_email}</p>` : ''}
-              ${presupuestoActual.cliente_direccion ? `<p style="color: #64748b; font-size: 0.9rem;">${presupuestoActual.cliente_direccion}</p>` : ''}
-            </div>
-
-            <h3 style="font-weight: 600; margin-bottom: 15px; color: #1e293b;">Detalle del Presupuesto</h3>
-            <table class="table" style="margin-bottom: 30px;">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Descripción</th>
-                  <th>Medidas</th>
-                  <th style="text-align: right;">Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${presupuestoActual.items.map((item, index) => `
-                  <tr>
-                    <td>${index + 1}</td>
-                    <td>
-                      <div style="font-weight: 600;">${item.descripcion}</div>
-                      <div style="font-size: 0.85rem; color: #64748b; margin-top: 4px;">Tejido: ${item.tejido_nombre}</div>
-                      <div style="font-size: 0.85rem; color: #64748b;">Sistema: ${item.sistema_nombre}</div>
-                      ${item.dos_piezas ? '<span class="badge badge-blue">En 2 piezas</span>' : ''}
-                      ${item.incluye_instalacion ? '<span class="badge badge-green" style="margin-left: 5px;">Con instalación</span>' : ''}
-                    </td>
-                    <td>${item.ancho} x ${item.alto} cm</td>
-                    <td style="text-align: right; font-weight: bold;">${item.precio_total.toFixed(2)}€</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-
-            <div style="display: flex; justify-content: flex-end;">
-              <div style="min-width: 400px;">
-                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
-                  <span>Subtotal (sin IVA):</span>
-                  <span style="font-weight: 600;">${presupuestoActual.total_sin_iva.toFixed(2)}€</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
-                  <span>IVA (21%):</span>
-                  <span style="font-weight: 600;">${(presupuestoActual.total_sin_iva * 0.21).toFixed(2)}€</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 20px; background: #dbeafe; border-radius: 8px; margin-top: 15px;">
-                  <span style="font-size: 1.3rem; font-weight: bold;">TOTAL:</span>
-                  <span style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">${presupuestoActual.total_con_iva.toFixed(2)}€</span>
-                </div>
-              </div>
-            </div>
-
-            ${presupuestoActual.notas ? `
-              <div style="margin-top: 30px; padding: 15px; background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px;">
-                <h4 style="font-weight: 600; margin-bottom: 10px;">Notas:</h4>
-                <p style="color: #1e293b;">${presupuestoActual.notas}</p>
-              </div>
-            ` : ''}
-
-            <div style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 0.8rem;">
-              <p>Presupuesto válido por 30 días.</p>
-              <p style="margin-top: 5px;">Canotex Textil S.L. - C/ Penedés, 87 - 25005 Lleida</p>
-            </div>
-          </div>
-        </div>
-      `;
     }
 
     function descargarPresupuesto() {
-      const content = document.getElementById('presupuestoContent').innerHTML;
-      const blob = new Blob([content], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Presupuesto_${presupuestoActual.numero}.html`;
-      a.click();
-      URL.revokeObjectURL(url);
+      alert("Función de descarga aún no implementada.");
     }
 
     init();
