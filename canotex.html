@@ -288,7 +288,6 @@
       <div class="header no-print">
         <button class="btn btn-secondary" onclick="mostrarDashboard()">← Volver</button>
         <div style="display: flex; gap: 10px;">
-          <button class="btn btn-success" onclick="descargarPresupuesto()">💾 Guardar</button>
           <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir</button>
         </div>
       </div>
@@ -467,28 +466,22 @@
       }
 
       const anchoCalculado = dosPiezas ? ancho / 2 : ancho;
-      let multiplicador = 1;
       let tejidoMetros = 0;
 
       if (tipo === 'estor_paquetto' || tipo === 'estor_plegable') {
         tejidoMetros = (anchoCalculado + 40) / 100;
       } else if (tipo === 'cortina_onda_perfecta') {
-        multiplicador = 2.4;
-        tejidoMetros = (anchoCalculado * multiplicador) / 100;
+        tejidoMetros = (anchoCalculado * 2.4) / 100;
       } else if (tipo === 'cortina_triple_pliegue') {
-        multiplicador = 2.7;
-        tejidoMetros = (anchoCalculado * multiplicador) / 100;
+        tejidoMetros = (anchoCalculado * 2.7) / 100;
       } else if (tipo === 'cortina_ollados') {
-        multiplicador = 2.2;
-        tejidoMetros = (anchoCalculado * multiplicador) / 100;
+        tejidoMetros = (anchoCalculado * 2.2) / 100;
       } else if (tipo === 'cortina_plana') {
         tejidoMetros = (anchoCalculado * 1.4) / 100;
       } else if (tipo === 'cortina_fruncida') {
-        multiplicador = 2.5;
-        tejidoMetros = (anchoCalculado * multiplicador) / 100;
+        tejidoMetros = (anchoCalculado * 2.5) / 100;
       } else if (tipo === 'cortina_palas') {
-        multiplicador = 2.6;
-        tejidoMetros = (anchoCalculado * multiplicador) / 100;
+        tejidoMetros = (anchoCalculado * 2.6) / 100;
       }
 
       const precioTejido = tejidoMetros * tejidoSeleccionado.precio;
@@ -648,7 +641,7 @@
         return;
       }
 
-      tbody.innerHTML = presupuestos.map(p => `
+      tbody.innerHTML = presupuestos.slice().reverse().map(p => `
         <tr onclick="verPresupuesto('${p.id}')">
           <td>${p.numero}</td>
           <td>${p.cliente_nombre}</td>
@@ -768,17 +761,6 @@
           </div>
         </div>
       `;
-    }
-
-    function descargarPresupuesto() {
-      const content = document.getElementById('presupuestoContent').innerHTML;
-      const blob = new Blob([content], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Presupuesto_${presupuestoActual.numero}.html`;
-      a.click();
-      URL.revokeObjectURL(url);
     }
 
     init();
