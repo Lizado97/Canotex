@@ -1187,20 +1187,17 @@
             });
         }
 
-       function actualizarResumen() {
-    const totalItems = itemsActuales.length;
-    const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
-    const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
-    const instalacion = incluirInstalacion ? (50 * totalItems) : 0;
-    const subtotalConInstalacion = subtotal + instalacion;
-    const iva = subtotalConInstalacion * 0.21;
-    const total = subtotalConInstalacion + iva;
+      function actualizarResumen() {
+            const totalItems = itemsActuales.length;
+            const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
+            const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
+            const instalacion = incluirInstalacion ? (50 * totalItems) : 0;
+            const subtotalConInstalacion = subtotal + instalacion;
+            const iva = subtotalConInstalacion * 0.21;
+            const total = subtotalConInstalacion + iva;
 
-    document.getElementById('total-items').textContent = totalItems;
-    document.getElementById('subtotal').textContent = subtotalConInstalacion.toFixed(2) + '€';
-    document.getElementById('iva').textContent = iva.toFixed(2) + '€';
-    document.getElementById('total').textContent = total.toFixed(2) + '€';
-}
+            document.getElementById('total-items').textContent = totalItems;
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + '€';
             
             const instalacionLine = document.getElementById('instalacion-line');
             if (incluirInstalacion && totalItems > 0) {
