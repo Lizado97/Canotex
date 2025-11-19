@@ -1215,28 +1215,19 @@
         }
 
       function actualizarResumen() {
-            const totalItems = itemsActuales.length;
-            const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
-            const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
-            const instalacion = incluirInstalacion ? (50 * totalItems) : 0;
-            const subtotalConInstalacion = subtotal + instalacion;
-            const iva = subtotalConInstalacion * 0.21;
-            const total = subtotalConInstalacion + iva;
+    const totalItems = itemsActuales.length;
+    const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
+    const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
+    const instalacion = incluirInstalacion ? (50 * totalItems) : 0;
+    const subtotalConInstalacion = subtotal + instalacion;
+    const iva = subtotalConInstalacion * 0.21;
+    const total = subtotalConInstalacion + iva;
 
-            document.getElementById('total-items').textContent = totalItems;
-            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + '€';
-            
-            const instalacionLine = document.getElementById('instalacion-line');
-            if (incluirInstalacion && totalItems > 0) {
-                instalacionLine.style.display = 'flex';
-                document.getElementById('instalacion-precio').textContent = instalacion.toFixed(2) + '€';
-            } else {
-                instalacionLine.style.display = 'none';
-            }
-            
-            document.getElementById('iva').textContent = iva.toFixed(2) + '€';
-            document.getElementById('total').textContent = total.toFixed(2) + '€';
-        }
+    document.getElementById('total-items').textContent = totalItems;
+    document.getElementById('subtotal').textContent = subtotalConInstalacion.toFixed(2) + '€';
+    document.getElementById('iva').textContent = iva.toFixed(2) + '€';
+    document.getElementById('total').textContent = total.toFixed(2) + '€';
+}
 
         function guardarPresupuesto() {
             const nombre = document.getElementById('cliente-nombre').value;
@@ -1370,12 +1361,7 @@
                             <span>Subtotal:</span>
                             <strong>${p.total_sin_iva.toFixed(2)}€</strong>
                         </div>
-                        ${p.incluir_instalacion ? `
-                        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
-                            <span>Instalación:</span>
-                            <strong>${instalacionTotal.toFixed(2)}€</strong>
-                        </div>
-                        ` : ''}
+                        
                         <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
                             <span>IVA (21%):</span>
                             <strong>${(p.total_sin_iva * 0.21).toFixed(2)}€</strong>
