@@ -646,9 +646,9 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary" onclick="agregarItem()" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
-                            ➕ Calcular y Agregar al Presupuesto
-                        </button>
+                           <button class="btn btn-primary" onclick="agregarItem()" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                            <span id="btn-texto">➕ Calcular y Agregar al Presupuesto</span>
+                            </button>
                     </div>
 
                     <div class="card" id="items-card" style="display: none;">
@@ -991,6 +991,7 @@
         };
 
         let itemsActuales = [];
+        let editandoItemId = null;
 
         document.addEventListener('DOMContentLoaded', function() {
             cargarSistemas();
@@ -1134,7 +1135,7 @@
             const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema;
 
             const item = {
-                id: Date.now(),
+                id: editandoItemId || Date.now(),
                 tipo,
                 descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre}${dosPiezas ? ' (2 piezas)' : ''}`,
                 ancho, alto,
@@ -1143,6 +1144,12 @@
                 precio_total: precioTotal,
                 dos_piezas: dosPiezas
             };
+            if (editandoItemId) {
+                const index = itemsActuales.findIndex(i => i.id === editandoItemId);
+                    itemsActuales[index] = item;
+                    editandoItemId = null;
+                document.getElementById('btn-texto').textContent = '➕ Calcular y Agregar al Presupuesto';
+                } else
 
             itemsActuales.push(item);
             actualizarItems();
@@ -1162,6 +1169,23 @@
             actualizarItems();
             actualizarResumen();
         }
+        
+        function editarItem(id) {
+    const item = itemsActuales.find(i => i.id === id);
+    if (!item) return;
+    
+    document.getElementById('tipo-cortina').value = item.tipo;
+    document.getElementById('ancho').value = item.ancho;
+    document.getElementById('alto').value = item.alto;
+    document.getElementById('tejido').value = item.tejido_nombre;
+    document.getElementById('tejido-search').value = item.tejido_nombre;
+    document.getElementById('sistema').value = item.sistema_nombre === 'Sin sistema' ? '' : item.sistema_nombre;
+    document.getElementById('dos-piezas').checked = item.dos_piezas;
+    document.getElementById('btn-texto').textContent = '✏️ Actualizar Item';
+    
+    editandoItemId = id;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
         function actualizarItems() {
             const lista = document.getElementById('items-list');
@@ -1180,8 +1204,11 @@
                         <h4>#${index + 1} - ${item.descripcion}</h4>
                         <p>Medidas: ${item.ancho}cm x ${item.alto}cm | Sistema: ${item.sistema_nombre}</p>
                     </div>
+                   <div style="display: flex; gap: 0.5rem; align-items: center;">
                     <div class="item-price">${item.precio_total.toFixed(2)}€</div>
-                    <button class="btn btn-danger" onclick="eliminarItem(${item.id})">🗑️</button>
+                      <button class="btn" onclick="editarItem(${item.id})" style="background: #f59e0b; color: white; padding: 0.5rem 1rem;">✏️ Editar</button>
+                      <button class="btn btn-danger" onclick="eliminarItem(${item.id})">🗑️</button>
+                    </div>
                 `;
                 lista.appendChild(div);
             });
@@ -1375,6 +1402,7 @@
             document.getElementById('cliente-direccion').value = '';
             document.getElementById('notas').value = '';
             document.getElementById('incluir-instalacion').checked = false;
+            document.getElementById('btn-texto').textContent = '➕ Calcular y Agregar al Presupuesto';
             itemsActuales = [];
             actualizarItems();
             actualizarResumen();
