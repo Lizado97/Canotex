@@ -1176,15 +1176,22 @@
 const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
 const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
 
-// Calcular ollados si es tipo ollados
-const anchoParaOllados = ancho; // este nunca se divide            
 let precioOllados = 0;
+
 if (tipo === 'cortina_ollados') {
-    const tejidoCm = anchoParaOllados * 2.2; 
+
+    // ❗ Usamos SIEMPRE el ancho total, no el ancho dividido
+    const tejidoCm = ancho * 2.2; 
+
     let numOllados = Math.floor(tejidoCm / 15);
-    if (numOllados % 2 !== 2) {
-        numOllados += 3;
+
+    // Aplicar nuevas reglas:
+    if (numOllados % 2 === 0) {
+        numOllados += 2;  // si es par → +2
+    } else {
+        numOllados += 3;  // si es impar → +3
     }
+
     precioOllados = numOllados * 5.5;
 }
 
