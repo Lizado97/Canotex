@@ -1259,19 +1259,19 @@ const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + 
            const total = subtotal * 1.21;
 
             const presupuesto = {
-                id: Date.now().toString(),
-                numero: String(JSON.parse(localStorage.getItem('presupuestos') || '[]').length + 1).padStart(4, '0'),
-                cliente_nombre: nombre,
-                cliente_telefono: document.getElementById('cliente-telefono').value,
-                cliente_email: document.getElementById('cliente-email').value,
-                cliente_direccion: document.getElementById('cliente-direccion').value,
-                fecha: new Date().toISOString().split('T')[0],
-                items: itemsActuales,
-                total_sin_iva: subtotal,
-                total_con_iva: total,
-                estado: 'borrador',
-                notas: document.getElementById('notas').
-            };
+    id: Date.now().toString(),
+    numero: String(JSON.parse(localStorage.getItem('presupuestos') || '[]').length + 1).padStart(4, '0'),
+    cliente_nombre: nombre,
+    cliente_telefono: document.getElementById('cliente-telefono').value,
+    cliente_email: document.getElementById('cliente-email').value,
+    cliente_direccion: document.getElementById('cliente-direccion').value,
+    fecha: new Date().toISOString().split('T')[0],
+    items: itemsActuales,
+    total_sin_iva: subtotal,
+    total_con_iva: total,
+    estado: 'borrador',
+    notas: document.getElementById('notas').value
+};
 
             let presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
             presupuestos.push(presupuesto);
