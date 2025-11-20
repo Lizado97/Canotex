@@ -1129,11 +1129,7 @@
             else if (anchoParaTejido <= 300) precioConfeccion = confeccion[300];
             else precioConfeccion = confeccion[350] || confeccion[300];
 
-           const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
-            const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
-            const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
-
-            // Calcular ollados si es tipo ollados
+             // Calcular ollados si es tipo ollados
             let precioOllados = 0;
             if (tipo === 'cortina_ollados') {
             let numOllados = Math.floor(tejidoMetros * 100 / 15);
@@ -1143,6 +1139,9 @@
             precioOllados = numOllados * 5.5;
                 }
 
+           const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
+            const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
+            const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
             const precioInstalacion = formData.instalacion ? 50 : 0;
             const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + precioOllados + precioInstalacion;
            
