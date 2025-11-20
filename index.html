@@ -1128,6 +1128,8 @@
             else if (anchoParaTejido <= 250) precioConfeccion = confeccion[250];
             else if (anchoParaTejido <= 300) precioConfeccion = confeccion[300];
             else precioConfeccion = confeccion[350] || confeccion[300];
+            const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
+            const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
 
            
             const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
