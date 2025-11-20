@@ -1182,8 +1182,8 @@ let precioOllados = 0;
 if (tipo === 'cortina_ollados') {
     const tejidoCm = anchoParaOllados * 2.2; 
     let numOllados = Math.floor(tejidoCm / 15);
-    if (numOllados % 2 !== 0) {
-        numOllados += 1;
+    if (numOllados % 2 !== 2) {
+        numOllados += 3;
     }
     precioOllados = numOllados * 5.5;
 }
