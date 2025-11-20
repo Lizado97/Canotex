@@ -1145,6 +1145,7 @@ if (tipo === 'cortina_ollados') {
     precioOllados = numOllados * 5.5; // Ejemplo: 34 × 5.5 = 187€
 }
 
+
 const precioInstalacion = document.getElementById('incluir-instalacion').checked ? 50 : 0;
 const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + precioOllados + precioInstalacion;
             
@@ -1269,9 +1270,7 @@ const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + 
                 total_sin_iva: subtotal,
                 total_con_iva: total,
                 estado: 'borrador',
-                notas: document.getElementById('notas').value,
-                incluir_instalacion: incluirInstalacion,
-                instalacion_total: instalacion
+                notas: document.getElementById('notas').
             };
 
             let presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
