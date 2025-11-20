@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -517,7 +517,7 @@
                                 <th>Fecha</th>
                                 <th>Items</th>
                                 <th style="text-align: right;">Total</th>
-                                <th style="text-align: center;">Estado</th>
+                                <th style="text-align: center;">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1129,11 +1129,24 @@
             else if (anchoParaTejido <= 300) precioConfeccion = confeccion[300];
             else precioConfeccion = confeccion[350] || confeccion[300];
 
-            const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
-            const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
+           const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
             const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
-            const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema;
+            const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
 
+            // Calcular ollados si es tipo ollados
+            let precioOllados = 0;
+            if (tipo === 'cortina_ollados') {
+            let numOllados = Math.floor(tejidoMetros * 100 / 15);
+            if (numOllados % 2 !== 0) {
+                numOllados += 1;
+                    }
+            precioOllados = numOllados * 5.5;
+                }
+
+            const precioInstalacion = formData.instalacion ? 50 : 0;
+            const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + precioOllados + precioInstalacion;
+           
+            
             const item = {
                 id: editandoItemId || Date.now(),
                 tipo,
@@ -1297,11 +1310,23 @@
                     <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
                     <td>${p.items.length}</td>
                     <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
-                    <td style="text-align: center;"><span class="badge badge-${p.estado}">${p.estado}</span></td>
+                    <td style="text-align: center;">
+                    <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
+
+        function eliminarPresupuesto(id, event) {
+    event.stopPropagation();
+    if (confirm('¿Estás seguro de eliminar este presupuesto?')) {
+        let presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
+        presupuestos = presupuestos.filter(p => p.id !== id);
+        localStorage.setItem('presupuestos', JSON.stringify(presupuestos));
+        cargarDashboard();
+    }
+}
 
         function verDetalle(id) {
             const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
