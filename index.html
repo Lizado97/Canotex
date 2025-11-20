@@ -517,7 +517,7 @@
                                 <th>Fecha</th>
                                 <th>Items</th>
                                 <th style="text-align: right;">Total</th>
-                                <th style="text-align: center;">Estado</th>
+                                <th style="text-align: center;">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1243,10 +1243,8 @@
                 return;
             }
 
-            const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
-            const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
-            const instalacion = incluirInstalacion ? (50 * itemsActuales.length) : 0;
-            const total = (subtotal + instalacion) * 1.21;
+           const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
+           const total = subtotal * 1.21;
 
             const presupuesto = {
                 id: Date.now().toString(),
@@ -1257,7 +1255,7 @@
                 cliente_direccion: document.getElementById('cliente-direccion').value,
                 fecha: new Date().toISOString().split('T')[0],
                 items: itemsActuales,
-                total_sin_iva: subtotal + instalacion,
+                total_sin_iva: subtotal,
                 total_con_iva: total,
                 estado: 'borrador',
                 notas: document.getElementById('notas').value,
@@ -1323,7 +1321,7 @@
             const p = presupuestos.find(pr => pr.id === id);
             if (!p) return;
 
-            const instalacionTotal = p.instalacion_total || 0;
+           
             document.getElementById('detalle-content').innerHTML = `
                 <div class="aviso-orientativo">
                     <strong>⚠️ PRESUPUESTO ORIENTATIVO</strong>
