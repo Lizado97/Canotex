@@ -1137,11 +1137,12 @@ const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccio
 // Calcular ollados si es tipo ollados
 let precioOllados = 0;
 if (tipo === 'cortina_ollados') {
-    let numOllados = Math.floor(tejidoMetros * 100 / 15);
+    const tejidoCm = anchoParaTejido * 2.2; // Ejemplo: 232 × 2.2 = 510.4 cm
+    let numOllados = Math.floor(tejidoCm / 15); // Ejemplo: 510.4 ÷ 15 = 34.02 → 34
     if (numOllados % 2 !== 0) {
-        numOllados += 1;
+        numOllados += 1; // Si es impar, sumar 1
     }
-    precioOllados = numOllados * 5.5;
+    precioOllados = numOllados * 5.5; // Ejemplo: 34 × 5.5 = 187€
 }
 
 const precioInstalacion = document.getElementById('incluir-instalacion').checked ? 50 : 0;
