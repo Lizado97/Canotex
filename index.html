@@ -1009,27 +1009,69 @@
         }
 
     function calcularPrecioSistema(ancho, sistemaNombre) {
-    if (!sistemaNombre) return 0;
-    const sistema = SISTEMAS[sistemaNombre];
-    if (!sistema) return 0;
-    
-    // Para barras fijas (tienen solo una medida exacta)
-    const medidas = Object.keys(sistema).map(r => parseInt(r));
-    if (medidas.length === 1) {
-        return sistema[medidas[0]] || 0;
-    }
-    
-    // Para sistemas con rangos
-    const rangos = medidas.sort((a, b) => a - b);
-    const rangoMaximo = rangos[rangos.length - 1];
-    if (ancho > rangoMaximo) {
-        const anchoMitad = ancho / 2;
-        const rangoParaMitad = rangos.find(r => anchoMitad <= r) || rangoMaximo;
-        return (sistema[rangoParaMitad] || 0) * 2;
-    }
-    const rangoAplicable = rangos.find(r => ancho <= r);
-    return sistema[rangoAplicable || rangoMaximo] || 0;
+  if (!sistemaNombre) return 0;
+  const sistema = SISTEMAS[sistemaNombre];
+  if (!sistema) return 0;
+  
+  // Lista de barras de forja
+  const barrasForja = [
+   "Barra Forja Negra 20mm - 150cm"
+    "Barra Forja Negra 20mm - 200cm"
+    "Barra Forja Negra 20mm - 250cm"
+    "Barra Forja Blanca 20mm - 150cm"
+    "Barra Forja Blanca 20mm - 200cm"
+    "Barra Forja Blanca 20mm - 250cm"
+    "Barra Óxido 20mm - 150cm"
+    "Barra Óxido 20mm - 200cm"
+    "Barra Óxido 20mm - 250cm"
+    "Barra Acero 20mm - 150cm"
+    "Barra Acero 20mm - 200cm"
+    "Barra Acero 20mm - 250cm"
+    "Barra Oro Viejo 20mm - 150cm"
+    "Barra Oro Viejo 20mm - 200cm"
+    "Barra Oro Viejo 20mm - 250cm"
+    "Barra Forja Negra 28mm - 150cm"
+    "Barra Forja Negra 28mm - 200cm"
+    "Barra Forja Negra 28mm - 250cm"
+    "Barra Forja Blanca 28mm - 150cm"
+    "Barra Forja Blanca 28mm - 200cm"
+    "Barra Forja Blanca 28mm - 250cm"
+    "Barra Óxido 28mm - 150cm"
+    "Barra Óxido 28mm - 200cm"
+    "Barra Óxido 28mm - 250cm"
+    "Barra Acero 28mm - 150cm"
+    "Barra Acero 28mm - 200cm"
+    "Barra Acero 28mm - 250cm"
+    "Barra Oro Viejo 28mm - 150cm"
+    "Barra Oro Viejo 28mm - 200cm"
+    "Barra Oro Viejo 28mm - 250cm"
+    "Barra Cuadrada con Anillas - 150cm"
+    "Barra Cuadrada con Anillas - 200cm"
+    "Barra Cuadrada con Anillas - 250cm"
+    "Barra Cuadrada con Anillas - 300cm"
+  ];
+  
+  const esBarraForja = barrasForja.includes(sistemaNombre);
+  const rangos = Object.keys(sistema).map(r => parseInt(r)).sort((a, b) => a - b);
+  const rangoMaximo = rangos[rangos.length - 1];
+  
+  // Si es barra de forja y supera 250cm → multiplicar por 2
+  if (esBarraForja && ancho > 250) {
+    const rangoAplicable = rangos.find(r => ancho / 2 <= r) || rangoMaximo;
+    return (sistema[rangoAplicable] || 0) * 2;
+  }
+  
+  // Lógica normal para otros sistemas
+  if (ancho > rangoMaximo) {
+    const anchoMitad = ancho / 2;
+    const rangoParaMitad = rangos.find(r => anchoMitad <= r) || rangoMaximo;
+    return (sistema[rangoParaMitad] || 0) * 2;
+  }
+  
+  const rangoAplicable = rangos.find(r => ancho <= r);
+  return sistema[rangoAplicable || rangoMaximo] || 0;
 }
+
 
         function buscarTejido() {
             const searchInput = document.getElementById('tejido-search');
