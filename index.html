@@ -1130,12 +1130,22 @@
             else precioConfeccion = confeccion[350] || confeccion[300];
 
            
-           const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
-           const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
-            const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
-            const precioInstalacion = formData.instalacion ? 50 : 0;
-            const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + precioInstalacion;
-           
+         const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
+const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
+const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
+
+// Calcular ollados si es tipo ollados
+let precioOllados = 0;
+if (tipo === 'cortina_ollados') {
+    let numOllados = Math.floor(tejidoMetros * 100 / 15);
+    if (numOllados % 2 !== 0) {
+        numOllados += 1;
+    }
+    precioOllados = numOllados * 5.5;
+}
+
+const precioInstalacion = document.getElementById('incluir-instalacion').checked ? 50 : 0;
+const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + precioOllados + precioInstalacion;
             
             const item = {
                 id: editandoItemId || Date.now(),
