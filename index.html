@@ -1353,8 +1353,7 @@ function mostrarOpcionesBarras() {
     const totalItems = itemsActuales.length;
     const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
     const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
-    const instalacion = incluirInstalacion ? (50 * totalItems) : 0;
-    const subtotalConInstalacion = subtotal + instalacion;
+    const subtotalConInstalacion = subtotal;
     const iva = subtotalConInstalacion * 0.21;
     const total = subtotalConInstalacion + iva;
 
