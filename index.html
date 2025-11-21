@@ -630,46 +630,49 @@
                         </div>
 
                         <!-- Sección 3: Sistema -->
-                        <div class="step-box step-amber">
-                            <div class="step-header">
-                                <div class="step-number">3</div>
-                                <div class="step-title">Sistema de Instalación</div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Sistema (opcional)</label>
-                                <select id="sistema"> onchange="mostrarOpcionesBarras()">
-                                    <option value="">Sin sistema</option>
-                                </select>
-                            </div>
-                            </div>
+                       <div class="step-box step-amber">
+    <div class="step-header">
+        <div class="step-number">3</div>
+        <div class="step-title">Sistema de Instalación</div>
+    </div>
 
-                            <!-- Opciones adicionales para barras -->
-                            <div id="opciones-barras" style="display: none;">
-                                <div class="form-group" id="diametro-container">
-                                    <label>Diámetro</label>
-                                    <select id="diametro-barra">
-                                        <option value="">Selecciona...</option>
-                                        <option value="20">20mm</option>
-                                        <option value="28">28mm</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Medida</label>
-                                    <select id="medida-barra">
-                                        <option value="">Selecciona...</option>
-                                        <option value="150">150cm</option>
-                                        <option value="200">200cm</option>
-                                        <option value="250">250cm</option>
-                                        <option value="300">300cm</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="checkbox-container">
-                                <input type="checkbox" id="incluir-instalacion" onchange="actualizarResumen()">
-                                <label for="incluir-instalacion">🔧 Incluir instalación</label>
-                            </div>
-                        </div>
+    <!-- Select de sistema -->
+    <div class="form-group">
+        <label>Sistema (opcional)</label>
+        <select id="sistema">
+            <option value="">Sin sistema</option>
+            <option value="Barra Redonda">Barra Redonda</option>
+            <option value="Barra Cuadrada con Anillas">Barra Cuadrada con Anillas</option>
+            <!-- Añade aquí otros sistemas si los hay -->
+        </select>
+    </div>
+
+    <!-- Opciones adicionales para barras -->
+    <div id="opciones-barras" style="display: none;">
+        <div class="form-group" id="diametro-container">
+            <label>Diámetro</label>
+            <select id="diametro-barra">
+                <option value="">Selecciona...</option>
+                <option value="20">20mm</option>
+                <option value="28">28mm</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Medida</label>
+            <select id="medida-barra">
+                <option value="">Selecciona...</option>
+                <option value="150">150cm</option>
+                <option value="200">200cm</option>
+                <option value="250">250cm</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="checkbox-container">
+        <input type="checkbox" id="incluir-instalacion">
+        <label for="incluir-instalacion">🔧 Incluir instalación</label>
+    </div>
+</div
 
                            <button class="btn btn-primary" onclick="agregarItem()" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
                             <span id="btn-texto">➕ Calcular y Agregar al Presupuesto</span>
