@@ -589,6 +589,9 @@
                                     <option value="cortina_ollados">Cortina con Ollados</option>
                                     <option value="cortina_triple_pliegue">Cortina Triple Pliegue</option>
                                     <option value="cortina_palas">Cortina Palas</option>
+                                    <option value="cortina_plana_doble">Cortina Plana Doble Tejido</option>
+                                    <option value="cortina_plegones">Cortina Plegones</option>
+
                                 </select>
                             </div>
                             
@@ -639,7 +642,29 @@
                                     <option value="">Sin sistema</option>
                                 </select>
                             </div>
-                            
+                            </div>
+
+                            <!-- Opciones adicionales para barras -->
+                            <div id="opciones-barras" style="display: none;">
+                                <div class="form-group" id="diametro-container">
+                                    <label>Diámetro</label>
+                                    <select id="diametro-barra">
+                                        <option value="">Selecciona...</option>
+                                        <option value="20">20mm</option>
+                                        <option value="28">28mm</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Medida</label>
+                                    <select id="medida-barra">
+                                        <option value="">Selecciona...</option>
+                                        <option value="150">150cm</option>
+                                        <option value="200">200cm</option>
+                                        <option value="250">250cm</option>
+                                        <option value="300">300cm</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="checkbox-container">
                                 <input type="checkbox" id="incluir-instalacion" onchange="actualizarResumen()">
                                 <label for="incluir-instalacion">🔧 Incluir instalación</label>
@@ -932,40 +957,22 @@
     "Barra Guía Redonda 20mm - Onda Perfecta": {100:66.49, 150:81.12, 200:95.75, 250:126.82, 300:141.46},
     "Barra Guía Redonda 28mm - Convencional": {100:74.18, 150:85.98, 200:100.99, 250:134.08, 300:149.09},
     "Barra Guía Redonda 28mm - Onda Perfecta": {100:76.46, 150:93.28, 200:105.32, 250:139.51, 300:155.60},
-    "Barra Forja Negra 20mm - 150cm": {150:66.96},
-    "Barra Forja Negra 20mm - 200cm": {200:71.27},
-    "Barra Forja Negra 20mm - 250cm": {250:95.72},
-    "Barra Forja Blanca 20mm - 150cm": {150:66.96},
-    "Barra Forja Blanca 20mm - 200cm": {200:71.27},
-    "Barra Forja Blanca 20mm - 250cm": {250:95.72},
-    "Barra Óxido 20mm - 150cm": {150:66.96},
-    "Barra Óxido 20mm - 200cm": {200:71.27},
-    "Barra Óxido 20mm - 250cm": {250:95.72},
-    "Barra Acero 20mm - 150cm": {150:64.66},
-    "Barra Acero 20mm - 200cm": {200:69.02},
-    "Barra Acero 20mm - 250cm": {250:93.47},
-    "Barra Oro Viejo 20mm - 150cm": {150:76.36},
-    "Barra Oro Viejo 20mm - 200cm": {200:87.71},
-    "Barra Oro Viejo 20mm - 250cm": {250:99.68},
-    "Barra Forja Negra 28mm - 150cm": {150:132.24},
-    "Barra Forja Negra 28mm - 200cm": {200:144.75},
-    "Barra Forja Negra 28mm - 250cm": {250:150.07},
-    "Barra Forja Blanca 28mm - 150cm": {150:132.24},
-    "Barra Forja Blanca 28mm - 200cm": {200:144.75},
-    "Barra Forja Blanca 28mm - 250cm": {250:150.07},
-    "Barra Óxido 28mm - 150cm": {150:132.24},
-    "Barra Óxido 28mm - 200cm": {200:144.75},
-    "Barra Óxido 28mm - 250cm": {250:150.07},
-    "Barra Acero 28mm - 150cm": {150:134.49},
-    "Barra Acero 28mm - 200cm": {200:147.00},
-    "Barra Acero 28mm - 250cm": {250:152.33},
-    "Barra Oro Viejo 28mm - 150cm": {150:138.10},
-    "Barra Oro Viejo 28mm - 200cm": {200:150.61},
-    "Barra Oro Viejo 28mm - 250cm": {250:155.94},
-    "Barra Cuadrada con Anillas - 150cm": {150:99.18},
-    "Barra Cuadrada con Anillas - 200cm": {200:108.32},
-    "Barra Cuadrada con Anillas - 250cm": {250:151.10},
-    "Barra Cuadrada con Anillas - 300cm": {300:176.21}
+    "Barra Forja Negra": "forja",
+    "Barra Forja Blanca": "forja",
+    "Barra Óxido": "forja",
+    "Barra Acero": "forja",
+    "Barra Oro Viejo": "forja",
+    "Barra Cuadrada con Anillas": "forja"
+};
+
+// Precios de barras según nombre, diámetro y medida
+const PRECIOS_BARRAS = {
+    "Barra Forja Negra": { "20": {150:66.96, 200:71.27, 250:95.72}, "28": {150:132.24, 200:144.75, 250:150.07} },
+    "Barra Forja Blanca": { "20": {150:66.96, 200:71.27, 250:95.72}, "28": {150:132.24, 200:144.75, 250:150.07} },
+    "Barra Óxido": { "20": {150:66.96, 200:71.27, 250:95.72}, "28": {150:132.24, 200:144.75, 250:150.07} },
+    "Barra Acero": { "20": {150:64.66, 200:69.02, 250:93.47}, "28": {150:134.49, 200:147.00, 250:152.33} },
+    "Barra Oro Viejo": { "20": {150:76.36, 200:87.71, 250:99.68}, "28": {150:138.10, 200:150.61, 250:155.94} },
+    "Barra Cuadrada con Anillas": { "único": {150:99.18, 200:108.32, 250:151.10, 300:176.21} }
 };
 
         const CONFECCION = {
@@ -976,7 +983,9 @@
             "cortina_plana": {100:31.24, 150:43.25, 200:55.28, 250:60.08, 300:66.09, 350:78.11},
             "cortina_ollados": {100:31.24, 150:43.25, 200:55.28, 250:60.08, 300:66.09, 350:78.11},
             "cortina_triple_pliegue": {100:56.23, 150:71.86, 200:87.48, 250:103.11, 300:118.72, 350:134.34},
-            "cortina_palas": {100:43.25, 150:55.28, 200:67.29, 250:79.31, 300:91.33, 350:103.34}
+            "cortina_palas": {100:43.25, 150:55.28, 200:67.29, 250:79.31, 300:91.33, 350:103.34},
+            "cortina_plana_doble": {100:31.24, 150:43.25, 200:55.28, 250:60.08, 300:66.09, 350:78.11},
+            "cortina_plegones": {100:43.25, 150:55.28, 200:67.29, 250:79.31, 300:91.33, 350:103.34}
         };
 
         const TIPOS_NOMBRE = {
@@ -987,7 +996,10 @@
             "cortina_plana": "Cortina Plana",
             "cortina_ollados": "Cortina con Ollados",
             "cortina_triple_pliegue": "Cortina Triple Pliegue",
-            "cortina_palas": "Cortina Palas"
+            "cortina_palas": "Cortina Palas",
+            "cortina_plana_doble": "Cortina Plana Doble Tejido",
+            "cortina_plegones": "Cortina Plegones"
+
         };
 
         let itemsActuales = [];
@@ -999,77 +1011,114 @@
         });
 
         function cargarSistemas() {
-            const select = document.getElementById('sistema');
-            Object.keys(SISTEMAS).forEach(s => {
-                const option = document.createElement('option');
-                option.value = s;
-                option.textContent = s;
-                select.appendChild(option);
-            });
+    const select = document.getElementById('tipo-cortina');
+    select.addEventListener('change', filtrarSistemasPorTipo);
+}
+
+function filtrarSistemasPorTipo() {
+    const tipo = document.getElementById('tipo-cortina').value;
+    const selectSistema = document.getElementById('sistema');
+    selectSistema.innerHTML = '<option value="">Sin sistema</option>';
+    
+    let sistemasPermitidos = [];
+    
+    if (tipo === 'estor_paquetto' || tipo === 'estor_plegable') {
+        sistemasPermitidos = Object.keys(SISTEMAS).filter(s => s.includes('Estor a Cadena'));
+    } else if (tipo === 'cortina_ollados') {
+        sistemasPermitidos = Object.keys(SISTEMAS).filter(s => SISTEMAS[s] === 'forja');
+    } else if (tipo === 'cortina_onda_perfecta') {
+        sistemasPermitidos = Object.keys(SISTEMAS).filter(s => s.includes('Onda Perfecta'));
+    } else if (tipo === 'cortina_fruncida' || tipo === 'cortina_palas' || tipo === 'cortina_triple_pliegue' || 
+               tipo === 'cortina_plana' || tipo === 'cortina_plana_doble' || tipo === 'cortina_plegones') {
+        sistemasPermitidos = Object.keys(SISTEMAS).filter(s => s.includes('Convencional') || SISTEMAS[s] === 'forja');
+    }
+    
+    sistemasPermitidos.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s;
+        option.textContent = s;
+        selectSistema.appendChild(option);
+    });
+}
+
+function mostrarOpcionesBarras() {
+    const sistema = document.getElementById('sistema').value;
+    const opcionesBarras = document.getElementById('opciones-barras');
+    const diametroContainer = document.getElementById('diametro-container');
+    const selectMedida = document.getElementById('medida-barra');
+    
+    if (SISTEMAS[sistema] === 'forja') {
+        opcionesBarras.style.display = 'block';
+        
+        // Mostrar/ocultar diámetro según si es "Barra Cuadrada con Anillas"
+        if (sistema === 'Barra Cuadrada con Anillas') {
+            diametroContainer.style.display = 'none';
+            document.getElementById('diametro-barra').value = 'único';
+            // Añadir opción 300cm
+            if (!selectMedida.querySelector('[value="300"]')) {
+                const opt300 = document.createElement('option');
+                opt300.value = '300';
+                opt300.textContent = '300cm';
+                selectMedida.appendChild(opt300);
+            }
+        } else {
+            diametroContainer.style.display = 'block';
+            document.getElementById('diametro-barra').value = '';
+            // Quitar opción 300cm si existe
+            const opt300 = selectMedida.querySelector('[value="300"]');
+            if (opt300) opt300.remove();
         }
+    } else {
+        opcionesBarras.style.display = 'none';
+        document.getElementById('diametro-barra').value = '';
+        document.getElementById('medida-barra').value = '';
+    }
+}
 
     function calcularPrecioSistema(ancho, sistemaNombre) {
-  if (!sistemaNombre) return 0;
-  const sistema = SISTEMAS[sistemaNombre];
-  if (!sistema) return 0;
-  
-  // Lista de barras de forja
-  const barrasForja = [
-   "Barra Forja Negra 20mm - 150cm",
-    "Barra Forja Negra 20mm - 200cm",
-    "Barra Forja Negra 20mm - 250cm",
-    "Barra Forja Blanca 20mm - 150cm",
-    "Barra Forja Blanca 20mm - 200cm",
-    "Barra Forja Blanca 20mm - 250cm",
-    "Barra Óxido 20mm - 150cm",
-    "Barra Óxido 20mm - 200cm",
-    "Barra Óxido 20mm - 250cm",
-    "Barra Acero 20mm - 150cm",
-    "Barra Acero 20mm - 200cm",
-    "Barra Acero 20mm - 250cm",
-    "Barra Oro Viejo 20mm - 150cm",
-    "Barra Oro Viejo 20mm - 200cm",
-    "Barra Oro Viejo 20mm - 250cm",
-    "Barra Forja Negra 28mm - 150cm",
-    "Barra Forja Negra 28mm - 200cm",
-    "Barra Forja Negra 28mm - 250cm",
-    "Barra Forja Blanca 28mm - 150cm",
-    "Barra Forja Blanca 28mm - 200cm",
-    "Barra Forja Blanca 28mm - 250cm",
-    "Barra Óxido 28mm - 150cm",
-    "Barra Óxido 28mm - 200cm",
-    "Barra Óxido 28mm - 250cm",
-    "Barra Acero 28mm - 150cm",
-    "Barra Acero 28mm - 200cm",
-    "Barra Acero 28mm - 250cm",
-    "Barra Oro Viejo 28mm - 150cm",
-    "Barra Oro Viejo 28mm - 200cm",
-    "Barra Oro Viejo 28mm - 250cm",
-    "Barra Cuadrada con Anillas - 150cm",
-    "Barra Cuadrada con Anillas - 200cm",
-    "Barra Cuadrada con Anillas - 250cm",
-    "Barra Cuadrada con Anillas - 300cm"
-  ];
-  
-  const esBarraForja = barrasForja.includes(sistemaNombre);
-  const rangos = Object.keys(sistema).map(r => parseInt(r)).sort((a, b) => a - b);
-  const rangoMaximo = rangos[rangos.length - 1];
-  
-  // Si es barra de forja y supera 250cm → multiplicar por 2
-  if (esBarraForja && ancho > 250) {
-    const rangoAplicable = rangos.find(r => ancho / 2 <= r) || rangoMaximo;
-    return (sistema[rangoAplicable] || 0) * 2;
-  }
-  
-  // Lógica normal para otros sistemas
-  if (ancho > rangoMaximo) {
-    const anchoMitad = ancho / 2;
-    const rangoParaMitad = rangos.find(r => anchoMitad <= r) || rangoMaximo;
-    return (sistema[rangoParaMitad] || 0) * 2;
-  }
-  
-  const rangoAplicable = rangos.find(r => ancho <= r);
-  return sistema[rangoAplicable || rangoMaximo] || 0;
+    if (!sistemaNombre) return 0;
+    
+    // Si es barra de forja
+    if (SISTEMAS[sistemaNombre] === 'forja') {
+        const diametro = document.getElementById('diametro-barra').value;
+        const medida = parseInt(document.getElementById('medida-barra').value);
+        
+        if (!medida) {
+            alert('Por favor selecciona el diámetro y medida de la barra');
+            return 0;
+        }
+        
+        const preciosBarra = PRECIOS_BARRAS[sistemaNombre];
+        if (!preciosBarra) return 0;
+        
+        const preciosPorDiametro = preciosBarra[diametro] || preciosBarra['único'];
+        if (!preciosPorDiametro) return 0;
+        
+        const precio = preciosPorDiametro[medida] || 0;
+        
+        // Si el ancho supera 250cm, multiplicar por 2
+        if (ancho > 250) {
+            return precio * 2;
+        }
+        
+        return precio;
+    }
+    
+    // Lógica normal para otros sistemas
+    const sistema = SISTEMAS[sistemaNombre];
+    if (!sistema) return 0;
+    
+    const rangos = Object.keys(sistema).map(r => parseInt(r)).sort((a, b) => a - b);
+    const rangoMaximo = rangos[rangos.length - 1];
+    
+    if (ancho > rangoMaximo) {
+        const anchoMitad = ancho / 2;
+        const rangoParaMitad = rangos.find(r => anchoMitad <= r) || rangoMaximo;
+        return (sistema[rangoParaMitad] || 0) * 2;
+    }
+    
+    const rangoAplicable = rangos.find(r => ancho <= r);
+    return sistema[rangoAplicable || rangoMaximo] || 0;
 }
 
 
@@ -1132,7 +1181,27 @@
             const ancho = parseFloat(document.getElementById('ancho').value);
             const alto = parseFloat(document.getElementById('alto').value);
             const tejidoNombre = document.getElementById('tejido').value;
-            const sistemaNombre = document.getElementById('sistema').value;
+            let sistemaNombreCompleto = sistemaNombre || 'Sin sistema';
+if (SISTEMAS[sistemaNombre] === 'forja') {
+    const diametro = document.getElementById('diametro-barra').value;
+    const medida = document.getElementById('medida-barra').value;
+    if (sistemaNombre !== 'Barra Cuadrada con Anillas') {
+        sistemaNombreCompleto = `${sistemaNombre} ${diametro}mm - ${medida}cm`;
+    } else {
+        sistemaNombreCompleto = `${sistemaNombre} - ${medida}cm`;
+    }
+}
+
+const item = {
+    id: editandoItemId || Date.now(),
+    tipo,
+    descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre}${dosPiezas ? ' (2 piezas)' : ''}`,
+    ancho, alto,
+    tejido_nombre: tejidoNombre,
+    sistema_nombre: sistemaNombreCompleto,
+    precio_total: precioTotal,
+    dos_piezas: dosPiezas
+};
             const dosPiezas = document.getElementById('dos-piezas').checked;
 
             if (!tipo || !ancho || !alto || !tejidoNombre) {
@@ -1158,7 +1227,11 @@
                 tejidoMetros = (anchoParaTejido * 2.7) / 100;
             } else if (tipo === 'cortina_palas') {
                 tejidoMetros = (anchoParaTejido * 2.6) / 100;
-            }
+            } else if (tipo === 'cortina_plana_doble') {
+    tejidoMetros = (anchoParaTejido * 2) / 100;
+} else if (tipo === 'cortina_plegones') {
+    tejidoMetros = (anchoParaTejido * 2.6) / 100;
+}
 
              tejidoMetros = Math.round(tejidoMetros * 100) / 100;
             const precioTejido = tejidoMetros * tejido.precio;
