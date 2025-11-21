@@ -1177,121 +1177,127 @@ function mostrarOpcionesBarras() {
         }
 
         function agregarItem() {
-            const tipo = document.getElementById('tipo-cortina').value;
-            const ancho = parseFloat(document.getElementById('ancho').value);
-            const alto = parseFloat(document.getElementById('alto').value);
-            const tejidoNombre = document.getElementById('tejido').value;
-            let sistemaNombreCompleto = sistemaNombre || 'Sin sistema';
-if (SISTEMAS[sistemaNombre] === 'forja') {
-    const diametro = document.getElementById('diametro-barra').value;
-    const medida = document.getElementById('medida-barra').value;
-    if (sistemaNombre !== 'Barra Cuadrada con Anillas') {
-        sistemaNombreCompleto = `${sistemaNombre} ${diametro}mm - ${medida}cm`;
-    } else {
-        sistemaNombreCompleto = `${sistemaNombre} - ${medida}cm`;
-    }
-}
+    const tipo = document.getElementById('tipo-cortina').value;
+    const ancho = parseFloat(document.getElementById('ancho').value);
+    const alto = parseFloat(document.getElementById('alto').value);
+    const tejidoNombre = document.getElementById('tejido').value;
+    const sistemaNombre = document.getElementById('sistema').value;  // ← FALTABA ESTO
+    
+    let sistemaNombreCompleto = sistemaNombre || 'Sin sistema';
 
-            const dosPiezas = document.getElementById('dos-piezas').checked;
+    // Si el sistema existe y es tipo forja
+    if (sistemaNombre && SISTEMAS[sistemaNombre] === 'forja') {
+        const diametro = document.getElementById('diametro-barra').value;
+        const medida = document.getElementById('medida-barra').value;
 
-            if (!tipo || !ancho || !alto || !tejidoNombre) {
-                alert('Por favor completa todos los campos obligatorios');
-                return;
-            }
-
-            const tejido = TEJIDOS.find(t => t.nombre === tejidoNombre);
-            const anchoParaTejido = dosPiezas ? ancho / 2 : ancho;
-            let tejidoMetros = 0;
-            
-            if (tipo === 'estor_paquetto' || tipo === 'estor_plegable') {
-                tejidoMetros = (anchoParaTejido + 40) / 100;
-            } else if (tipo === 'cortina_onda_perfecta') {
-                tejidoMetros = (anchoParaTejido * 2.4) / 100;
-            } else if (tipo === 'cortina_ollados') {
-                tejidoMetros = (anchoParaTejido * 2.2) / 100;
-            } else if (tipo === 'cortina_plana') {
-                tejidoMetros = (anchoParaTejido * 1.4) / 100;
-            } else if (tipo === 'cortina_fruncida') {
-                tejidoMetros = (anchoParaTejido * 2.5) / 100;
-            } else if (tipo === 'cortina_triple_pliegue') {
-                tejidoMetros = (anchoParaTejido * 2.7) / 100;
-            } else if (tipo === 'cortina_palas') {
-                tejidoMetros = (anchoParaTejido * 2.6) / 100;
-            } else if (tipo === 'cortina_plana_doble') {
-    tejidoMetros = (anchoParaTejido * 2) / 100;
-} else if (tipo === 'cortina_plegones') {
-    tejidoMetros = (anchoParaTejido * 2.6) / 100;
-}
-
-             tejidoMetros = Math.round(tejidoMetros * 100) / 100;
-            const precioTejido = tejidoMetros * tejido.precio;
-            const confeccion = CONFECCION[tipo];
-            let precioConfeccion = 0;
-            
-            if (anchoParaTejido <= 100) precioConfeccion = confeccion[100];
-            else if (anchoParaTejido <= 150) precioConfeccion = confeccion[150];
-            else if (anchoParaTejido <= 200) precioConfeccion = confeccion[200];
-            else if (anchoParaTejido <= 250) precioConfeccion = confeccion[250];
-            else if (anchoParaTejido <= 300) precioConfeccion = confeccion[300];
-            else precioConfeccion = confeccion[350] || confeccion[300];
-
-           
-         const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
-const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
-const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
-
-let precioOllados = 0;
-
-if (tipo === 'cortina_ollados') {
-
-    // ❗ Usamos SIEMPRE el ancho total, no el ancho dividido
-    const tejidoCm = ancho * 2.2; 
-
-    let numOllados = Math.floor(tejidoCm / 15);
-
-    // Aplicar nuevas reglas:
-    if (numOllados % 2 === 0) {
-        numOllados += 2;  // si es par → +2
-    } else {
-        numOllados += 3;  // si es impar → +3
-    }
-
-    precioOllados = numOllados * 5.5;
-}
-
-
-const precioInstalacion = document.getElementById('incluir-instalacion').checked ? 50 : 0;
-const precioTotal = precioTejidoFinal + precioConfeccionFinal + precioSistema + precioOllados + precioInstalacion;
-            
-            const item = {
-                id: editandoItemId || Date.now(),
-                tipo,
-                descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre}${dosPiezas ? ' (2 piezas)' : ''}`,
-                ancho, alto,
-                tejido_nombre: tejidoNombre,
-                sistema_nombre: sistemaNombre || 'Sin sistema',
-                precio_total: precioTotal,
-                dos_piezas: dosPiezas
-            };
-            if (editandoItemId) {
-                const index = itemsActuales.findIndex(i => i.id === editandoItemId);
-                    itemsActuales[index] = item;
-                    editandoItemId = null;
-                document.getElementById('btn-texto').textContent = '➕ Calcular y Agregar al Presupuesto';
-                } else
-
-            itemsActuales.push(item);
-            actualizarItems();
-            actualizarResumen();
-
-            document.getElementById('tipo-cortina').value = '';
-            document.getElementById('ancho').value = '';
-            document.getElementById('alto').value = '';
-            document.getElementById('tejido').value = '';
-            document.getElementById('tejido-search').value = '';
-            document.getElementById('sistema').value = '';
-            document.getElementById('dos-piezas').checked = false;
+        if (sistemaNombre !== 'Barra Cuadrada con Anillas') {
+            sistemaNombreCompleto = `${sistemaNombre} ${diametro}mm - ${medida}cm`;
+        } else {
+            sistemaNombreCompleto = `${sistemaNombre} - ${medida}cm`;
         }
+    }
+
+    const dosPiezas = document.getElementById('dos-piezas').checked;
+
+    if (!tipo || !ancho || !alto || !tejidoNombre) {
+        alert('Por favor completa todos los campos obligatorios');
+        return;
+    }
+
+    const tejido = TEJIDOS.find(t => t.nombre === tejidoNombre);
+    const anchoParaTejido = dosPiezas ? ancho / 2 : ancho;
+
+    let tejidoMetros = 0;
+
+    if (tipo === 'estor_paquetto' || tipo === 'estor_plegable')
+        tejidoMetros = (anchoParaTejido + 40) / 100;
+    else if (tipo === 'cortina_onda_perfecta')
+        tejidoMetros = (anchoParaTejido * 2.4) / 100;
+    else if (tipo === 'cortina_ollados')
+        tejidoMetros = (anchoParaTejido * 2.2) / 100;
+    else if (tipo === 'cortina_plana')
+        tejidoMetros = (anchoParaTejido * 1.4) / 100;
+    else if (tipo === 'cortina_fruncida')
+        tejidoMetros = (anchoParaTejido * 2.5) / 100;
+    else if (tipo === 'cortina_triple_pliegue')
+        tejidoMetros = (anchoParaTejido * 2.7) / 100;
+    else if (tipo === 'cortina_palas')
+        tejidoMetros = (anchoParaTejido * 2.6) / 100;
+    else if (tipo === 'cortina_plana_doble')
+        tejidoMetros = (anchoParaTejido * 2) / 100;
+    else if (tipo === 'cortina_plegones')
+        tejidoMetros = (anchoParaTejido * 2.6) / 100;
+
+    tejidoMetros = Math.round(tejidoMetros * 100) / 100;
+
+    const precioTejido = tejidoMetros * tejido.precio;
+    const confeccion = CONFECCION[tipo];
+
+    let precioConfeccion = 0;
+
+    if (anchoParaTejido <= 100) precioConfeccion = confeccion[100];
+    else if (anchoParaTejido <= 150) precioConfeccion = confeccion[150];
+    else if (anchoParaTejido <= 200) precioConfeccion = confeccion[200];
+    else if (anchoParaTejido <= 250) precioConfeccion = confeccion[250];
+    else if (anchoParaTejido <= 300) precioConfeccion = confeccion[300];
+    else precioConfeccion = confeccion[350] || confeccion[300];
+
+    const precioSistema = calcularPrecioSistema(ancho, sistemaNombre);
+    const precioTejidoFinal = dosPiezas ? precioTejido * 2 : precioTejido;
+    const precioConfeccionFinal = dosPiezas ? precioConfeccion * 2 : precioConfeccion;
+
+    let precioOllados = 0;
+
+    if (tipo === 'cortina_ollados') {
+        const tejidoCm = ancho * 2.2; 
+        let numOllados = Math.floor(tejidoCm / 15);
+
+        if (numOllados % 2 === 0) numOllados += 2;
+        else numOllados += 3;
+
+        precioOllados = numOllados * 5.5;
+    }
+
+    const precioInstalacion = document.getElementById('incluir-instalacion').checked ? 50 : 0;
+
+    const precioTotal = 
+        precioTejidoFinal + 
+        precioConfeccionFinal + 
+        precioSistema + 
+        precioOllados + 
+        precioInstalacion;
+
+    const item = {
+        id: editandoItemId || Date.now(),
+        tipo,
+        descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre}${dosPiezas ? ' (2 piezas)' : ''}`,
+        ancho, alto,
+        tejido_nombre: tejidoNombre,
+        sistema_nombre: sistemaNombreCompleto,
+        precio_total: precioTotal,
+        dos_piezas: dosPiezas
+    };
+
+    if (editandoItemId) {
+        const index = itemsActuales.findIndex(i => i.id === editandoItemId);
+        itemsActuales[index] = item;
+        editandoItemId = null;
+        document.getElementById('btn-texto').textContent = '➕ Calcular y Agregar al Presupuesto';
+    } else {
+        itemsActuales.push(item);
+    }
+
+    actualizarItems();
+    actualizarResumen();
+
+    document.getElementById('tipo-cortina').value = '';
+    document.getElementById('ancho').value = '';
+    document.getElementById('alto').value = '';
+    document.getElementById('tejido').value = '';
+    document.getElementById('tejido-search').value = '';
+    document.getElementById('sistema').value = '';
+    document.getElementById('dos-piezas').checked = false;
+}
 
         function eliminarItem(id) {
             itemsActuales = itemsActuales.filter(item => item.id !== id);
