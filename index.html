@@ -1192,16 +1192,6 @@ if (SISTEMAS[sistemaNombre] === 'forja') {
     }
 }
 
-const item = {
-    id: editandoItemId || Date.now(),
-    tipo,
-    descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre}${dosPiezas ? ' (2 piezas)' : ''}`,
-    ancho, alto,
-    tejido_nombre: tejidoNombre,
-    sistema_nombre: sistemaNombreCompleto,
-    precio_total: precioTotal,
-    dos_piezas: dosPiezas
-};
             const dosPiezas = document.getElementById('dos-piezas').checked;
 
             if (!tipo || !ancho || !alto || !tejidoNombre) {
