@@ -379,8 +379,9 @@
         }
 
         .search-box {
-            position: relative;
-        }
+    position: relative;
+    z-index: 100;
+}
 
         .search-results {
             position: absolute;
@@ -393,7 +394,7 @@
             border-radius: 12px;
             max-height: 300px;
             overflow-y: auto;
-            z-index: 1000;
+            z-index: 9999;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             margin-top: 0.5rem;
         }
