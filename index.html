@@ -150,8 +150,10 @@
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
-              position: relative;
+               margin-bottom: 1.5rem;
+    position: relative;
+    z-index: inherit;
+
         }
 
         .form-group label {
@@ -382,7 +384,7 @@
 
         .search-box {
     position: relative;
-    z-index: 100;
+    z-index: 1000;
 }
 
         .search-results {
@@ -396,7 +398,7 @@
             border-radius: 12px;
             max-height: 300px;
             overflow-y: auto;
-            z-index: 999999;
+            z-index: 9999999;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             margin-top: 0.5rem;
         }
@@ -452,11 +454,11 @@
     z-index: auto;
 }
 
-       .step-blue {
+    .step-blue {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
     border-color: rgba(99, 102, 241, 0.3);
     position: relative;
-    z-index: 100;
+    z-index: 1000;
 }
 
        .step-purple {
