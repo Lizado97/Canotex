@@ -136,6 +136,7 @@
             border-radius: 20px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             margin-bottom: 2rem;
+             overflow: visible !important;
         }
 
         .card h2 {
@@ -395,7 +396,7 @@
             border-radius: 12px;
             max-height: 300px;
             overflow-y: auto;
-            z-index: 9999;
+            z-index: 999999;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             margin-top: 0.5rem;
         }
@@ -449,7 +450,8 @@
             margin-bottom: 1.5rem;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-             overflow: visible;
+             overflow: visible !important;
+            z-index: auto;
         }
 
         .step-blue {
