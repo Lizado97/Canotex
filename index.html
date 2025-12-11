@@ -1,18 +1,16 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Presupuestos de Cortinas</title>
    
-      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
     <script src="firebase-config.js"></script> 
     
-    
-      <style>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -21,30 +19,52 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
             min-height: 100vh;
+            color: #e2e8f0;
+            position: relative;
+            overflow-x: hidden;
         }
-       .btn-secondary { 
-        background-color: #ef4444; 
-        color: white; 
-        border: none; 
-        padding: 10px 15px; 
-        border-radius: 4px; 
-        cursor: pointer; 
-    }
- 
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glassmorphism Cards */
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         .header {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
@@ -52,59 +72,80 @@
         }
 
         .header h1 {
-            color: #1e293b;
+            color: #e2e8f0;
             font-size: 2rem;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .btn {
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.3);
         }
 
         .btn-primary {
-            background: #2563eb;
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .btn-primary:hover {
-            background: #1d4ed8;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.5);
         }
 
         .btn-secondary {
-            background: #64748b;
-            color: white;
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .btn-secondary:hover {
-            background: #475569;
+            background: rgba(239, 68, 68, 0.3);
         }
 
         .btn-danger {
-            background: #ef4444;
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             margin-bottom: 2rem;
         }
 
         .card h2 {
-            color: #1e293b;
+            color: #e2e8f0;
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .form-group {
@@ -114,8 +155,9 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #475569;
+            color: #cbd5e1;
             font-weight: 500;
+            font-size: 0.9rem;
         }
 
         .form-group input,
@@ -123,18 +165,25 @@
         .form-group textarea {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             font-size: 1rem;
-            transition: border 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            transition: all 0.3s;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+            border-color: #6366f1;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #64748b;
         }
 
         .grid {
@@ -151,14 +200,20 @@
         }
 
         .item {
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.03);
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+
+        .item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(99, 102, 241, 0.3);
         }
 
         .item-info {
@@ -166,29 +221,36 @@
         }
 
         .item-info h4 {
-            color: #1e293b;
+            color: #e2e8f0;
             margin-bottom: 0.5rem;
         }
 
         .item-info p {
-            color: #64748b;
+            color: #94a3b8;
             font-size: 0.875rem;
         }
 
         .item-price {
             font-size: 1.25rem;
             font-weight: bold;
-            color: #2563eb;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-right: 1rem;
         }
 
         .resumen {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(167, 139, 250, 0.3);
             color: white;
             padding: 2rem;
-            border-radius: 12px;
+            border-radius: 20px;
             position: sticky;
             top: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.3);
         }
 
         .resumen h3 {
@@ -200,7 +262,7 @@
             display: flex;
             justify-content: space-between;
             padding: 1rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .resumen-total {
@@ -208,7 +270,7 @@
             font-weight: bold;
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid rgba(255,255,255,0.2);
         }
 
         .hidden {
@@ -222,25 +284,29 @@
         }
 
         .tabla thead {
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .tabla th {
             padding: 1rem;
             text-align: left;
-            color: #475569;
+            color: #cbd5e1;
             font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         .tabla td {
             padding: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            color: #1e293b;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+        }
+
+        .tabla tbody tr {
+            transition: all 0.3s;
         }
 
         .tabla tbody tr:hover {
-            background: #f8fafc;
+            background: rgba(255, 255, 255, 0.05);
             cursor: pointer;
         }
 
@@ -253,8 +319,8 @@
         }
 
         .badge-borrador {
-            background: #e2e8f0;
-            color: #475569;
+            background: rgba(148, 163, 184, 0.2);
+            color: #cbd5e1;
         }
 
         .stats {
@@ -265,11 +331,14 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(167, 139, 250, 0.3);
             color: white;
             padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.3);
         }
 
         .stat-card h3 {
@@ -288,10 +357,10 @@
             align-items: center;
             gap: 0.75rem;
             padding: 1rem;
-            background: white;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
             margin-top: 1rem;
-            border: 1px solid #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .checkbox-container input[type="checkbox"] {
@@ -299,12 +368,14 @@
             height: 20px;
             cursor: pointer;
             flex-shrink: 0;
+            accent-color: #6366f1;
         }
 
         .checkbox-container label {
             cursor: pointer;
             margin: 0;
             font-weight: 500;
+            color: #cbd5e1;
         }
 
         .search-box {
@@ -316,24 +387,26 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: white;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            background: rgba(30, 27, 75, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             max-height: 300px;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             margin-top: 0.5rem;
         }
 
         .search-result-item {
             padding: 1rem;
             cursor: pointer;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
         }
 
         .search-result-item:hover {
-            background: #f8fafc;
+            background: rgba(99, 102, 241, 0.2);
         }
 
         .search-result-item:last-child {
@@ -341,22 +414,23 @@
         }
 
         .aviso-orientativo {
-            background: #fef3c7;
-            border: 2px solid #fbbf24;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+            border: 2px solid rgba(251, 191, 36, 0.3);
             padding: 0.75rem 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 1rem;
             text-align: center;
+            backdrop-filter: blur(10px);
         }
 
         .aviso-orientativo strong {
-            color: #92400e;
+            color: #fbbf24;
             font-size: 0.875rem;
             display: block;
         }
 
         .aviso-orientativo p {
-            color: #78716c;
+            color: #fcd34d;
             font-size: 0.75rem;
             margin-top: 0.25rem;
         }
@@ -368,24 +442,26 @@
 
         .step-box {
             padding: 1.5rem;
-            border-radius: 12px;
-            border: 2px solid;
+            border-radius: 16px;
+            border: 1px solid;
             margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .step-blue {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-color: #3b82f6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border-color: rgba(99, 102, 241, 0.3);
         }
 
         .step-purple {
-            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
-            border-color: #a855f7;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
+            border-color: rgba(167, 139, 250, 0.3);
         }
 
         .step-amber {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-color: #f59e0b;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border-color: rgba(251, 191, 36, 0.3);
         }
 
         .step-header {
@@ -406,24 +482,25 @@
             font-weight: bold;
             font-size: 1.25rem;
             flex-shrink: 0;
+            box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.3);
         }
 
         .step-blue .step-number {
-            background: #2563eb;
+            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
         }
 
         .step-purple .step-number {
-            background: #9333ea;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
         }
 
         .step-amber .step-number {
-            background: #f59e0b;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
         }
 
         .step-title {
             font-size: 1.25rem;
             font-weight: 700;
-            color: #1e293b;
+            color: #e2e8f0;
         }
 
         @media (max-width: 768px) {
@@ -483,6 +560,10 @@
                 background: white;
             }
             
+            body::before {
+                display: none;
+            }
+            
             .btn, .hidden-print {
                 display: none !important;
             }
@@ -490,41 +571,70 @@
             .card {
                 box-shadow: none;
                 border: 1px solid #e2e8f0;
+                background: white;
             }
+            
+            .card h2, .header h1, .item-price {
+                -webkit-text-fill-color: initial;
+                color: #1e293b;
+            }
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+
+        select option {
+            background: #1e1b4b;
+            color: #e2e8f0;
         }
     </style>
 </head>
 <body>
-  <div id="loading-screen" style="text-align: center; padding-top: 50vh;">Verificando sesión...</div>
-    <div class="container">
+    <div id="loading-screen" style="text-align: center; padding-top: 50vh; color: white;">Verificando sesión...</div>
+    
+    <div class="container" id="main-app-content" style="display: none;">
         <!-- Vista Dashboard -->
-   
-      
         <div id="dashboard-view">
             <div class="header">
                 <div>
                     <h1>🪟 Canotex - Sistema de Presupuestos</h1>
-                    <p style="color: #64748b; margin-top: 0.5rem;">Gestión de presupuestos de cortinas</p>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">Gestión de presupuestos de cortinas</p>
                 </div>
-                <button class="btn btn-primary" onclick="mostrarVista('nuevo')">
-                    ➕ Nuevo Presupuesto
-                </button>
-                 <button class="btn btn-secondary" id="logoutButton">
-                🚪 Salir
-            </button>
-        </div>
-            
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="mostrarVista('nuevo')">
+                        ➕ Nuevo Presupuesto
+                    </button>
+                    <button class="btn btn-secondary" id="logoutButton">
+                        🚪 Salir
+                    </button>
+                </div>
+            </div>
 
             <div class="stats">
                 <div class="stat-card">
                     <h3>Total Presupuestos</h3>
                     <div class="value" id="total-presupuestos">0</div>
                 </div>
-                <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <div class="stat-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%); border-color: rgba(16, 185, 129, 0.3);">
                     <h3>Importe Total</h3>
                     <div class="value" id="total-importe">0€</div>
                 </div>
-                <div class="stat-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                <div class="stat-card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%); border-color: rgba(139, 92, 246, 0.3);">
                     <h3>Este Mes</h3>
                     <div class="value" id="total-mes">0</div>
                 </div>
@@ -555,8 +665,7 @@
                 </div>
             </div>
         </div>
-</div>
-</div>
+
         <!-- Vista Nuevo Presupuesto -->
         <div id="nuevo-view" class="hidden">
             <div class="header">
@@ -616,7 +725,6 @@
                                     <option value="cortina_palas">Cortina Palas</option>
                                     <option value="cortina_plana_doble">Cortina Plana Doble Tejido</option>
                                     <option value="cortina_plegones">Cortina Plegones</option>
-
                                 </select>
                             </div>
                             
@@ -655,7 +763,7 @@
                         </div>
 
                         <!-- Sección 3: Sistema -->
-                     <div class="step-box step-blue">
+                        <div class="step-box step-blue">
                             <div class="step-header">
                                 <div class="step-number">3</div>
                                 <div class="step-title">Sistema de Instalación</div>
@@ -663,12 +771,13 @@
                             
                             <div class="form-group">
                                 <label>Sistema (opcional)</label>
-                               <select id="sistema" onchange="mostrarOpcionesBarras()">
+                                <select id="sistema" onchange="mostrarOpcionesBarras()">
                                     <option value="">Sin sistema</option>
                                     <option value="barras">Barras</option>
                                 </select>
                             </div>
-                          <!-- Opciones adicionales para barras -->
+                            
+                            <!-- Opciones adicionales para barras -->
                             <div id="opciones-barras" style="display: none;">
                                 <div class="form-group" id="diametro-container">
                                     <label>Diámetro</label>
@@ -689,16 +798,16 @@
                                     </select>
                                 </div>
                             </div>
+                            
                             <div class="checkbox-container">
                                 <input type="checkbox" id="incluir-instalacion" onchange="actualizarResumen()">
                                 <label for="incluir-instalacion">🔧 Incluir instalación</label>
                             </div>
-
-                            </div>
-                           
-                           <button class="btn btn-primary" onclick="agregarItem()" style="width: 100%; padding: 1rem; background: #22c55e; color: white;">
-                            <span id="btn-texto">➕ </span>
-                            </button>
+                        </div>
+                        
+                        <button class="btn btn-success" onclick="agregarItem()" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                            <span id="btn-texto">+ Calcular y Agregar</span>
+                        </button>
                     </div>
 
                     <div class="card" id="items-card" style="display: none;">
