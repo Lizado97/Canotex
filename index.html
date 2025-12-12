@@ -325,7 +325,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -864,11 +864,7 @@
                         <div class="value" id="total-mes">0</div>
                         <p style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">👆 Click para ver detalles</p>
                     </div>
-                        <div class="stat-card">
-                        <h3>Importe Total</h3>
-                        <div class="value" id="total-importe">0€</div>
-                        <p style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">💰 Total acumulado</p>
-                    </div>
+                       
                 </div>
                 <div class="card">
                     <h2>Presupuestos Recientes</h2>
@@ -1844,8 +1840,6 @@ function mostrarOpcionesBarras() {
         function cargarDashboard() {
             const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
             document.getElementById('total-presupuestos').textContent = presupuestos.length;
-            const totalImporte = presupuestos.reduce((sum, p) => sum + p.total_con_iva, 0);
-            document.getElementById('total-importe').textContent = totalImporte.toFixed(0) + '€';
             const esteMes = presupuestos.filter(p => {
                 const fecha = new Date(p.fecha);
                 const ahora = new Date();
