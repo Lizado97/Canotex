@@ -1976,25 +1976,22 @@ function mostrarOpcionesBarras() {
             actualizarItems();
             actualizarResumen();
         }
-        // 1. Lógica de Protección (Debe ejecutarse después de la carga de auth)
-        auth.onAuthStateChanged((user) => {
-            document.getElementById('loading-screen').style.display = 'none';
+      
+   
+document.addEventListener("DOMContentLoaded", () => {
+    firebase.auth().onAuthStateChanged((user) => {
+        console.log("Estado de usuario:", user);
 
-            if (user) {
-                // Usuario logueado: Mostrar dashboard
-                document.getElementById('main-app-content').style.display = 'block';
-            } else {
-                // Usuario NO logueado: Redirigir a login.html
-                console.log("No hay usuario. Redirigiendo a login.html");
-                window.location.href = "login.html"; 
-            }
-        });
-        
-        // 2. Lógica de Cierre de Sesión
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            auth.signOut(); 
-        });
-        
+        if (user) {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("app").style.display = "block";
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+});
+
+      
     
       // Funciones del Menú
 function toggleMenu() {
@@ -2108,22 +2105,7 @@ function cargarGraficaMensual() {
         contenedor.appendChild(barra);
     });
 }
-<script>
-    // Verificar si el usuario está autenticado
-    auth.onAuthStateChanged(user => {
-        const loading = document.getElementById("loading-screen");
-        const main = document.getElementById("main-app-content");
 
-        if (user) {
-            // Sesión válida → mostrar la app
-            loading.style.display = "none";
-            main.style.display = "block";
-        } else {
-            // No autenticado → ir al login
-            window.location.href = "login.html";
-        }
-    });
-</script>
       
     </script>
 </body>
