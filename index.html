@@ -1974,7 +1974,7 @@ function mostrarOpcionesBarras() {
             actualizarItems();
             actualizarResumen();
         }
-          // 1. Lógica de Protección (Debe ejecutarse después de la carga de auth)
+        // 1. Lógica de Protección (Debe ejecutarse después de la carga de auth)
         auth.onAuthStateChanged((user) => {
             document.getElementById('loading-screen').style.display = 'none';
 
@@ -1986,6 +1986,11 @@ function mostrarOpcionesBarras() {
                 console.log("No hay usuario. Redirigiendo a login.html");
                 window.location.href = "login.html"; 
             }
+        });
+        
+        // 2. Lógica de Cierre de Sesión
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            auth.signOut(); 
         });
         
     
