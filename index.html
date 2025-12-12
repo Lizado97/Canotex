@@ -490,7 +490,11 @@
 
 /* Gráfica */
 .grafica-container {
-    background: white;
+    background: rgba(255, 255, 255, 0.05); /* Transparente */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde claro */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Sombra oscura */
     padding: 2rem;
     border-radius: 20px;
     margin-top: 2rem;
