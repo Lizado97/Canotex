@@ -512,13 +512,12 @@
 /* El color de la barra (barra) ya está bien (degradado azul/morado) */
 .barra {
     flex: 1;
-    margin: 0 5px;
-    background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%); 
-    border-radius: 8px 8px 0 0;
+    margin: 0 3px; /* Reducimos el margen entre barras */
+    background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%);
+    border-radius: 6px 6px 0 0;
     position: relative;
-    min-height: 20px;
+    min-height: 5px; /* Altura mínima por si no hay datos */
     transition: all 0.3s;
-    cursor: pointer;
 }
 
 .barra:hover {
@@ -531,9 +530,8 @@
     bottom: -25px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 0.75rem;
-    color: #cbd5e1; /* Hacemos las etiquetas de abajo más claras */
-    white-space: nowrap;
+    font-size: 0.65rem; /* Texto un poco más pequeño para que quepan los 12 */
+    color: #cbd5e1;
 }
 
 .barra-valor {
@@ -2055,45 +2053,52 @@ function mostrarPresupuestosDelMes() {
     mostrarVista('gestion');
 }
 
-// Gráfica mensual
+// Función para mostrar la vista y cargar los datos
 function mostrarGraficaMensual() {
-    mostrarVista('grafica');
+    mostrarVista('grafica'); // Asegúrate de que el ID coincida (grafica o grafica-view)
+    cargarGraficaMensual();
 }
 
 function cargarGraficaMensual() {
     const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
-    const porMes = {};
+    const nombresMeses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const anioActual = new Date().getFullYear();
+    
+    // Crear un array de 12 posiciones inicializado en 0
+    const conteoPorMes = new Array(12).fill(0);
 
+    // Llenar el array con los datos reales del año actual
     presupuestos.forEach(p => {
         const fecha = new Date(p.fecha);
-        const mesAnio = `${fecha.getMonth() + 1}/${fecha.getFullYear()}`;
-        porMes[mesAnio] = (porMes[mesAnio] || 0) + 1;
+        if (fecha.getFullYear() === anioActual) {
+            conteoPorMes[fecha.getMonth()]++;
+        }
     });
 
-    const meses = Object.keys(porMes).sort((a, b) => {
-        const [mesA, anioA] = a.split('/').map(Number);
-        const [mesB, anioB] = b.split('/').map(Number);
-        return anioA !== anioB ? anioA - anioB : mesA - mesB;
-    });
-
-    const maxValor = Math.max(...Object.values(porMes), 1);
+    const maxValor = Math.max(...conteoPorMes, 1);
     const contenedor = document.getElementById('grafica-barras');
     contenedor.innerHTML = '';
 
-    meses.forEach(mes => {
-        const valor = porMes[mes];
+    // Generar las 12 barras
+    conteoPorMes.forEach((valor, i) => {
         const altura = (valor / maxValor) * 100;
         
         const barra = document.createElement('div');
         barra.className = 'barra';
-        barra.style.height = `${altura}%`;
+        barra.style.height = `${Math.max(altura, 5)}%`; // Mínimo 5% para que se vea algo si hay 0
+        
         barra.innerHTML = `
             <div class="barra-valor">${valor}</div>
-            <div class="barra-label">${mes}</div>
+            <div class="barra-label">${nombresMeses[i]}</div>
         `;
+        
+        // Efecto hover simple para mostrar el mes completo si lo deseas
+        barra.title = `${nombresMeses[i]}: ${valor} presupuestos`;
+        
         contenedor.appendChild(barra);
     });
 }
+
     </script>
 </body>
 </html>
