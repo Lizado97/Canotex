@@ -1983,8 +1983,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Estado de usuario:", user);
 
         if (user) {
-            document.getElementById("loader").style.display = "none";
-            document.getElementById("app").style.display = "block";
+         document.getElementById("loading-screen").style.display = "none";
+document.getElementById("main-app-content").style.display = "block";
         } else {
             window.location.href = "login.html";
         }
