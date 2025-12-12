@@ -1,14 +1,16 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Presupuestos de Cortinas</title>
    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
     <script src="firebase-config.js"></script> 
+    
     
     <style>
         * {
@@ -806,9 +808,8 @@
     </style>
 </head>
 <body>
-<div class="container" id="main-app-content" style="display: none;">
- <div id="loading-screen" style="text-align: center; padding-top: 50vh;">Verificando sesión...</div>
- 
+  <div id="loading-screen" style="text-align: center; padding-top: 50vh;">Verificando sesión...</div>
+    <div class="container">
         <!-- Vista Dashboard -->
          <!-- Botón Hamburguesa -->
 <button class="btn-hamburguesa" onclick="toggleMenu()">
@@ -875,7 +876,7 @@
                                 <th>Cliente</th>
                                 <th>Fecha</th>
                                 <th>Items</th>
-                                <th style="text-align: right;">Total</th>
+                                   <th style="text-align: right;">Total</th>
                                 <th style="text-align: center;">Acción</th>
                             </tr>
                         </thead>
@@ -2094,34 +2095,24 @@ function cargarGraficaMensual() {
     });
 }
 // --- Código de Autenticación Corregido ---
-document.addEventListener("DOMContentLoaded", () => {
-    // Es CRUCIAL que Firebase SDK esté cargado ANTES de este punto
-    
-    // Comprueba si firebase.auth() existe para evitar errores si el SDK falla
-    if (typeof firebase === 'undefined' || typeof firebase.auth === 'undefined') {
-        console.error("Firebase Auth no está inicializado. Revisa la carga de los scripts.");
-        // Podrías añadir un fallo aquí, pero por ahora solo logueamos el error.
-        return; 
-    }
-    
-    firebase.auth().onAuthStateChanged((user) => {
-        console.log("Estado de usuario:", user);
+          // 1. Lógica de Protección (Debe ejecutarse después de la carga de auth)
+        auth.onAuthStateChanged((user) => {
+            document.getElementById('loading-screen').style.display = 'none';
 
-        if (user) {
-            // IDs corregidos para mostrar el contenido principal
-            document.getElementById("loading-screen").style.display = "none";
-            document.getElementById("main-app-content").style.display = "block"; // o 'flex' si usas Flexbox
-            
-            // Opcional: Llamar a cargarDashboard() si no lo hace el DOMContentLoaded principal
-            // cargarDashboard(); 
-
-        } else {
-            // Si no hay usuario, redirigir
-            window.location.href = "login.html";
-        }
-    });
-});
-
+            if (user) {
+                // Usuario logueado: Mostrar dashboard
+                document.getElementById('main-app-content').style.display = 'block';
+            } else {
+                // Usuario NO logueado: Redirigir a login.html
+                console.log("No hay usuario. Redirigiendo a login.html");
+                window.location.href = "login.html"; 
+            }
+        });
+        
+        // 2. Lógica de Cierre de Sesión
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            auth.signOut(); 
+        });
       
     </script>
 </body>
