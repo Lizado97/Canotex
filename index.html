@@ -810,7 +810,11 @@
 <body>
   <div id="loading-screen" style="text-align: center; padding-top: 50vh;">Verificando sesión...</div>
              <!-- Botón Hamburguesa -->
-                <div id="app-content" class="hidden"> 
+                <div id="main-app-content" class="hidden"> 
+      
+      <div id="app-content"> 
+          </div>
+
 <button class="btn-hamburguesa" onclick="toggleMenu()">
     <span></span>
 </button>
@@ -1174,6 +1178,9 @@
         <div class="grafica-barras" id="grafica-barras"></div>
     </div>
 </div>
+
+</div>
+</body>
 
     <script>
             const TEJIDOS = [
@@ -2098,25 +2105,39 @@ function cargarGraficaMensual() {
     });
 }
 // --- Código de Autenticación Corregido ---
-          // 1. Lógica de Protección (Debe ejecutarse después de la carga de auth)
-        auth.onAuthStateChanged((user) => {
-            document.getElementById('loading-screen').style.display = 'none';
 
-            if (user) {
-                // Usuario logueado: Mostrar dashboard
-                document.getElementById('main-app-content').style.display = 'block';
-            } else {
-                // Usuario NO logueado: Redirigir a login.html
-                console.log("No hay usuario. Redirigiendo a login.html");
-                window.location.href = "login.html"; 
-            }
-        });
+// 1. Lógica de Protección
+auth.onAuthStateChanged((user) => {
+    const loadingScreen = document.getElementById('loading-screen');
+    const appContent = document.getElementById('main-app-content');
+
+    if (loadingScreen) loadingScreen.style.display = 'none';
+
+    if (user) {
+        // Usuario logueado: Mostrar la aplicación
+        if (appContent) {
+            appContent.classList.remove('hidden');
+            // IMPORTANTE: Aseguramos que el dashboard sea lo primero que se ve
+            mostrarVista('dashboard'); 
+        }
+    } else {
+        // Usuario NO logueado: Redirigir a login
+        console.log("No hay usuario. Redirigiendo a login.html");
+        // Descomenta la siguiente línea cuando tengas el login.html listo
+        // window.location.href = "login.html"; 
         
-        // 2. Lógica de Cierre de Sesión
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            auth.signOut(); 
-        });
-      
+        // TEMPORALMENTE (para que puedas probar sin login):
+        // Si quieres probar la app sin estar logueado en Firebase, 
+        // descomenta las dos líneas de abajo y comenta el bloque if(user) entero.
+        /* if (appContent) appContent.classList.remove('hidden');
+        mostrarVista('dashboard');
+        */
+    }
+});
+
+// NOTA: He borrado el addEventListener de logoutButton porque ya lo tienes
+// en el HTML con onclick="auth.signOut()"
+
     </script>
 </body>
 </html>
