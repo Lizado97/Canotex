@@ -1,17 +1,10 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Presupuestos de Cortinas</title>
    
-      <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    
-    <script src="firebase-config.js"></script> 
-     
-    
     <style>
         * {
             margin: 0;
@@ -808,9 +801,8 @@
     </style>
 </head>
 <body>
-    <div id="loading-screen" style="text-align: center; padding-top: 50vh;">Verificando sesión...</div>
-
-    <div id="main-app-content" class="hidden">
+    
+    <div id="main-app-content">
 
         <div id="app-content">
             <button class="btn-hamburguesa" onclick="toggleMenu()">
@@ -834,8 +826,8 @@
                     <button class="btn btn-primary" onclick="enviarEmailAyuda()" style="width: 100%;">
                         📧 Ayuda
                     </button>
-                    <button class="btn btn-secondary" onclick="auth.signOut();" style="width: 100%;">
-                        🚪 Salir
+                    <button class="btn btn-secondary" onclick="window.location.reload();" style="width: 100%;">
+                        🔄 Recargar App
                     </button>
                 </div>
             </div>
@@ -846,7 +838,7 @@
                 <div class="header">
                     <div>
                         <h1>🪟 Sistema de Presupuestos</h1>
-                        <p style="color: #94a3b8; margin-top: 0.5rem;">Gestión de presupuestos de cortinas</p>
+                        <p style="color: #94a3b8; margin-top: 0.5rem;">Gestión de presupuestos de cortinas (Modo Local)</p>
                     </div>
                     <div style="display: flex; gap: 1rem;">
                         <button class="btn btn-primary" onclick="mostrarVista('nuevo')">
@@ -867,6 +859,11 @@
                         <h3>Este Mes</h3>
                         <div class="value" id="total-mes">0</div>
                         <p style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">👆 Click para ver detalles</p>
+                    </div>
+                     <div class="stat-card">
+                        <h3>Importe Total</h3>
+                        <div class="value" id="total-importe">0€</div>
+                        <p style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">💰 Total acumulado</p>
                     </div>
                 </div>
 
@@ -2067,7 +2064,7 @@ function cargarGraficaMensual() {
 
     presupuestos.forEach(p => {
         const fecha = new Date(p.fecha);
-        const mesAnio = ⁠ ${fecha.getMonth() + 1}/${fecha.getFullYear()} ⁠;
+        const mesAnio = `${fecha.getMonth() + 1}/${fecha.getFullYear()}`;
         porMes[mesAnio] = (porMes[mesAnio] || 0) + 1;
     });
 
@@ -2087,7 +2084,7 @@ function cargarGraficaMensual() {
         
         const barra = document.createElement('div');
         barra.className = 'barra';
-        barra.style.height = ⁠ ${altura}% ⁠;
+        barra.style.height = `${altura}%`;
         barra.innerHTML = `
             <div class="barra-valor">${valor}</div>
             <div class="barra-label">${mes}</div>
@@ -2095,26 +2092,6 @@ function cargarGraficaMensual() {
         contenedor.appendChild(barra);
     });
 }
-// --- Código de Autenticación Corregido ---
-          // 1. Lógica de Protección (Debe ejecutarse después de la carga de auth)
-        auth.onAuthStateChanged((user) => {
-            document.getElementById('loading-screen').style.display = 'none';
-
-            if (user) {
-                // Usuario logueado: Mostrar dashboard
-                document.getElementById('main-app-content').style.display = 'block';
-            } else {
-                // Usuario NO logueado: Redirigir a login.html
-                console.log("No hay usuario. Redirigiendo a login.html");
-                window.location.href = "login.html"; 
-            }
-        });
-        
-        // 2. Lógica de Cierre de Sesión
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            auth.signOut(); 
-        });
-      
     </script>
 </body>
 </html>
