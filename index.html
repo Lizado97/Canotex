@@ -1978,18 +1978,7 @@ function mostrarOpcionesBarras() {
         }
       
    
-document.addEventListener("DOMContentLoaded", () => {
-    firebase.auth().onAuthStateChanged((user) => {
-        console.log("Estado de usuario:", user);
 
-        if (user) {
-         document.getElementById("loading-screen").style.display = "none";
-document.getElementById("main-app-content").style.display = "block";
-        } else {
-            window.location.href = "login.html";
-        }
-    });
-});
 
       
     
@@ -2105,7 +2094,26 @@ function cargarGraficaMensual() {
         contenedor.appendChild(barra);
     });
 }
+// Verifica la sesión y controla las vistas
+auth.onAuthStateChanged(user => {
+    const loading = document.getElementById("loading-screen");
+    const app = document.getElementById("main-app-content");
+    const login = document.getElementById("login-view"); // si tienes esa vista
 
+    if (loading) loading.style.display = "none";
+
+    if (user) {
+        // Usuario logueado
+        if (app) app.style.display = "block";
+        if (login) login.style.display = "none";
+        console.log("Usuario activo:", user.uid);
+    } else {
+        // Usuario no logueado
+        if (app) app.style.display = "none";
+        if (login) login.style.display = "block";
+        console.log("No hay usuario activo");
+    }
+});
       
     </script>
 </body>
