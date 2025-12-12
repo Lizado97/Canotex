@@ -502,13 +502,14 @@
     justify-content: space-around;
     height: 300px;
     padding: 1rem;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15); /* Cambiamos el color de la línea inferior a un gris claro y transparente */
 }
 
+/* El color de la barra (barra) ya está bien (degradado azul/morado) */
 .barra {
     flex: 1;
     margin: 0 5px;
-    background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%);
+    background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%); 
     border-radius: 8px 8px 0 0;
     position: relative;
     min-height: 20px;
@@ -527,7 +528,7 @@
     left: 50%;
     transform: translateX(-50%);
     font-size: 0.75rem;
-    color: #64748b;
+    color: #cbd5e1; /* Hacemos las etiquetas de abajo más claras */
     white-space: nowrap;
 }
 
@@ -537,7 +538,7 @@
     left: 50%;
     transform: translateX(-50%);
     font-weight: bold;
-    color: #1e293b;
+    color: #e2e8f0; /* Hacemos los valores de arriba blancos o muy claros */
 }
 
 .stat-card.clickable {
