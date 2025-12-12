@@ -2108,6 +2108,22 @@ function cargarGraficaMensual() {
         contenedor.appendChild(barra);
     });
 }
+<script>
+    // Verificar si el usuario está autenticado
+    auth.onAuthStateChanged(user => {
+        const loading = document.getElementById("loading-screen");
+        const main = document.getElementById("main-app-content");
+
+        if (user) {
+            // Sesión válida → mostrar la app
+            loading.style.display = "none";
+            main.style.display = "block";
+        } else {
+            // No autenticado → ir al login
+            window.location.href = "login.html";
+        }
+    });
+</script>
       
     </script>
 </body>
