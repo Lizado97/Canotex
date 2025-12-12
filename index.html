@@ -355,6 +355,203 @@
             font-size: 2rem;
             font-weight: bold;
         }
+      
+      /* Menú lateral */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.menu-overlay.active {
+    display: block;
+}
+
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    left: -350px;
+    width: 350px;
+    height: 100%;
+    background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-lateral.active {
+    left: 0;
+}
+
+.menu-header {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-header h2 {
+    color: #e2e8f0;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.menu-content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.menu-item {
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 12px;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.menu-item:hover {
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.menu-footer {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn-hamburguesa {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 998;
+    background: rgba(99, 102, 241, 0.2);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-hamburguesa:hover {
+    background: rgba(99, 102, 241, 0.4);
+    transform: scale(1.05);
+}
+
+.btn-hamburguesa span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: white;
+    position: relative;
+}
+
+.btn-hamburguesa span::before,
+.btn-hamburguesa span::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 2px;
+    background: white;
+    left: 0;
+}
+
+.btn-hamburguesa span::before {
+    top: -8px;
+}
+
+.btn-hamburguesa span::after {
+    top: 8px;
+}
+
+/* Vista Gestión */
+.filtros-gestion {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Gráfica */
+.grafica-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    margin-top: 2rem;
+}
+
+.grafica-barras {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 300px;
+    padding: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.barra {
+    flex: 1;
+    margin: 0 5px;
+    background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%);
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    min-height: 20px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.barra:hover {
+    transform: scaleY(1.05);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.barra-label {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.barra-valor {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.stat-card.clickable {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.stat-card.clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.4);
+}
 
         .checkbox-container {
             display: flex;
@@ -610,7 +807,34 @@
 </head>
 <body>
     <div id="loading-screen" style="text-align: center; padding-top: 50vh; color: white;">Verificando sesión...</div>
+    <!-- Botón Hamburguesa -->
+<button class="btn-hamburguesa" onclick="toggleMenu()">
+    <span></span>
+</button>
+
+<!-- Menú Lateral -->
+<div class="menu-overlay" id="menu-overlay" onclick="toggleMenu()"></div>
+<div class="menu-lateral" id="menu-lateral">
+    <div class="menu-header">
+        <h2>🪟 Canotex</h2>
+        <p style="color: #94a3b8; font-size: 0.875rem;">Menú de navegación</p>
+    </div>
     
+    <div class="menu-content">
+        <div class="menu-item" onclick="mostrarVista('gestion'); toggleMenu();">
+            📋 Gestión de Presupuestos
+        </div>
+    </div>
+    
+    <div class="menu-footer">
+        <button class="btn btn-primary" onclick="enviarEmailAyuda()" style="width: 100%;">
+            📧 Ayuda
+        </button>
+        <button class="btn btn-secondary" onclick="auth.signOut();" style="width: 100%;">
+            🚪 Salir
+        </button>
+    </div>
+</div>
     <div class="container" id="main-app-content" style="display: none;">
         <!-- Vista Dashboard -->
         <div id="dashboard-view">
@@ -623,26 +847,22 @@
                     <button class="btn btn-primary" onclick="mostrarVista('nuevo')">
                         ➕ Nuevo Presupuesto
                     </button>
-                    <button class="btn btn-secondary" id="logoutButton">
-                        🚪 Salir
-                    </button>
+                 
                 </div>
             </div>
 
-            <div class="stats">
-                <div class="stat-card">
-                    <h3>Total Presupuestos</h3>
-                    <div class="value" id="total-presupuestos">0</div>
-                </div>
-                <div class="stat-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%); border-color: rgba(16, 185, 129, 0.3);">
-                    <h3>Importe Total</h3>
-                    <div class="value" id="total-importe">0€</div>
-                </div>
-                <div class="stat-card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%); border-color: rgba(139, 92, 246, 0.3);">
-                    <h3>Este Mes</h3>
-                    <div class="value" id="total-mes">0</div>
-                </div>
-            </div>
+      <div class="stats">
+    <div class="stat-card clickable" onclick="mostrarGraficaMensual()">
+        <h3>Total Presupuestos</h3>
+        <div class="value" id="total-presupuestos">0</div>
+        <p style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">📊 Click para ver gráfica</p>
+    </div>
+    <div class="stat-card clickable" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%); border-color: rgba(139, 92, 246, 0.3);" onclick="mostrarPresupuestosDelMes()">
+        <h3>Este Mes</h3>
+        <div class="value" id="total-mes">0</div>
+        <p style="font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.8;">👆 Click para ver detalles</p>
+    </div>
+</div>
 
             <div class="card">
                 <h2>Presupuestos Recientes</h2>
@@ -879,6 +1099,76 @@
             <div class="card" id="detalle-content"></div>
         </div>
     </div>
+<!-- Vista Gestión de Presupuestos -->
+<div id="gestion-view" class="hidden">
+    <div class="header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <button class="btn btn-secondary" onclick="mostrarVista('dashboard')">
+                ← Volver
+            </button>
+            <h1>Gestión de Presupuestos</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Filtros</h2>
+        <div class="filtros-gestion">
+            <div class="form-group">
+                <label>Buscar por nombre</label>
+                <input type="text" id="filtro-nombre" placeholder="Nombre del cliente..." oninput="filtrarPresupuestos()">
+            </div>
+            <div class="form-group">
+                <label>Buscar por número</label>
+                <input type="text" id="filtro-numero" placeholder="Número de presupuesto..." oninput="filtrarPresupuestos()">
+            </div>
+            <div class="form-group">
+                <label>Fecha desde</label>
+                <input type="date" id="filtro-fecha-desde" onchange="filtrarPresupuestos()">
+            </div>
+            <div class="form-group">
+                <label>Fecha hasta</label>
+                <input type="date" id="filtro-fecha-hasta" onchange="filtrarPresupuestos()">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Resultados (<span id="total-resultados">0</span>)</h2>
+        <div class="tabla-wrapper">
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Items</th>
+                        <th style="text-align: right;">Total</th>
+                        <th style="text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-gestion-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Vista Gráfica Mensual -->
+<div id="grafica-view" class="hidden">
+    <div class="header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <button class="btn btn-secondary" onclick="mostrarVista('dashboard')">
+                ← Volver
+            </button>
+            <h1>Presupuestos por Mes</h1>
+        </div>
+    </div>
+
+    <div class="grafica-container">
+        <h2 style="color: #1e293b; margin-bottom: 2rem;">📊 Presupuestos Mensuales</h2>
+        <div class="grafica-barras" id="grafica-barras"></div>
+    </div>
+</div>
 
     <script>
             const TEJIDOS = [
@@ -1302,19 +1592,28 @@ function mostrarOpcionesBarras() {
         });
 
         function mostrarVista(vista) {
-            document.getElementById('dashboard-view').classList.add('hidden');
-            document.getElementById('nuevo-view').classList.add('hidden');
-            document.getElementById('detalle-view').classList.add('hidden');
-            if (vista === 'dashboard') {
-                document.getElementById('dashboard-view').classList.remove('hidden');
-                cargarDashboard();
-            } else if (vista === 'nuevo') {
-                document.getElementById('nuevo-view').classList.remove('hidden');
-                limpiarFormulario();
-            } else if (vista === 'detalle') {
-                document.getElementById('detalle-view').classList.remove('hidden');
-            }
-        }
+    document.getElementById('dashboard-view').classList.add('hidden');
+    document.getElementById('nuevo-view').classList.add('hidden');
+    document.getElementById('detalle-view').classList.add('hidden');
+    document.getElementById('gestion-view').classList.add('hidden');
+    document.getElementById('grafica-view').classList.add('hidden');
+    
+    if (vista === 'dashboard') {
+        document.getElementById('dashboard-view').classList.remove('hidden');
+        cargarDashboard();
+    } else if (vista === 'nuevo') {
+        document.getElementById('nuevo-view').classList.remove('hidden');
+        limpiarFormulario();
+    } else if (vista === 'detalle') {
+        document.getElementById('detalle-view').classList.remove('hidden');
+    } else if (vista === 'gestion') {
+        document.getElementById('gestion-view').classList.remove('hidden');
+        cargarGestion();
+    } else if (vista === 'grafica') {
+        document.getElementById('grafica-view').classList.remove('hidden');
+        cargarGraficaMensual();
+    }
+}
 
         function agregarItem() {
     const tipo = document.getElementById('tipo-cortina').value;
@@ -1689,10 +1988,120 @@ function mostrarOpcionesBarras() {
             }
         });
         
-        // 2. Lógica de Cierre de Sesión
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            auth.signOut(); 
-        });
+    
+      // Funciones del Menú
+function toggleMenu() {
+    document.getElementById('menu-lateral').classList.toggle('active');
+    document.getElementById('menu-overlay').classList.toggle('active');
+}
+
+function enviarEmailAyuda() {
+    window.location.href = 'mailto:info@canotex.es?subject=Solicitud de Ayuda&body=Hola, necesito ayuda con...';
+}
+
+// Gestión de Presupuestos
+function cargarGestion() {
+    filtrarPresupuestos();
+}
+
+function filtrarPresupuestos() {
+    const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
+    const nombre = document.getElementById('filtro-nombre').value.toLowerCase();
+    const numero = document.getElementById('filtro-numero').value.toLowerCase();
+    const fechaDesde = document.getElementById('filtro-fecha-desde').value;
+    const fechaHasta = document.getElementById('filtro-fecha-hasta').value;
+
+    let filtrados = presupuestos.filter(p => {
+        const matchNombre = !nombre || p.cliente_nombre.toLowerCase().includes(nombre);
+        const matchNumero = !numero || p.numero.includes(numero);
+        
+        let matchFecha = true;
+        if (fechaDesde && p.fecha < fechaDesde) matchFecha = false;
+        if (fechaHasta && p.fecha > fechaHasta) matchFecha = false;
+        
+        return matchNombre && matchNumero && matchFecha;
+    });
+
+    const tbody = document.getElementById('tabla-gestion-body');
+    tbody.innerHTML = '';
+    document.getElementById('total-resultados').textContent = filtrados.length;
+
+    if (filtrados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 3rem; color: #64748b;">No se encontraron presupuestos</td></tr>';
+        return;
+    }
+
+    filtrados.reverse().forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${p.numero}</td>
+            <td>${p.cliente_nombre}</td>
+            <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
+            <td>${p.items.length}</td>
+            <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
+            <td style="text-align: center;">
+                <button class="btn btn-primary" onclick="verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">👁️ Ver</button>
+                <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Mostrar presupuestos del mes
+function mostrarPresupuestosDelMes() {
+    const ahora = new Date();
+    const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+    const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0);
+
+    document.getElementById('filtro-nombre').value = '';
+    document.getElementById('filtro-numero').value = '';
+    document.getElementById('filtro-fecha-desde').value = primerDia.toISOString().split('T')[0];
+    document.getElementById('filtro-fecha-hasta').value = ultimoDia.toISOString().split('T')[0];
+    
+    mostrarVista('gestion');
+}
+
+// Gráfica mensual
+function mostrarGraficaMensual() {
+    mostrarVista('grafica');
+}
+
+function cargarGraficaMensual() {
+    const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
+    const porMes = {};
+
+    presupuestos.forEach(p => {
+        const fecha = new Date(p.fecha);
+        const mesAnio = ⁠ ${fecha.getMonth() + 1}/${fecha.getFullYear()} ⁠;
+        porMes[mesAnio] = (porMes[mesAnio] || 0) + 1;
+    });
+
+    const meses = Object.keys(porMes).sort((a, b) => {
+        const [mesA, anioA] = a.split('/').map(Number);
+        const [mesB, anioB] = b.split('/').map(Number);
+        return anioA !== anioB ? anioA - anioB : mesA - mesB;
+    });
+
+    const maxValor = Math.max(...Object.values(porMes), 1);
+    const contenedor = document.getElementById('grafica-barras');
+    contenedor.innerHTML = '';
+
+    meses.forEach(mes => {
+        const valor = porMes[mes];
+        const altura = (valor / maxValor) * 100;
+        
+        const barra = document.createElement('div');
+        barra.className = 'barra';
+        barra.style.height = ⁠ ${altura}% ⁠;
+        barra.innerHTML = `
+            <div class="barra-valor">${valor}</div>
+            <div class="barra-label">${mes}</div>
+        `;
+        contenedor.appendChild(barra);
+    });
+}
+      
     </script>
 </body>
 </html>
