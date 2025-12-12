@@ -479,6 +479,107 @@
 .btn-hamburguesa span::after {
     top: 8px;
 }
+        /* --- ESTILO DEL PRESUPUESTO FINAL (DOCUMENTO) --- */
+.presupuesto-documento {
+    background: white;
+    color: #1e293b;
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 850px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.doc-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.doc-logo h1 {
+    color: #2563eb;
+    margin: 0;
+    font-size: 2rem;
+}
+
+.doc-info-meta {
+    text-align: right;
+}
+
+.doc-info-meta h2 {
+    margin: 0;
+    color: #64748b;
+    font-size: 1.2rem;
+}
+
+.doc-cliente-box {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.doc-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.doc-tabla th {
+    background: #2563eb;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.doc-tabla td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.doc-totales {
+    margin-left: auto;
+    width: 300px;
+}
+
+.total-fila {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+}
+
+.total-fila.final {
+    border-top: 2px solid #2563eb;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #2563eb;
+    margin-top: 10px;
+}
+
+/* --- REGLAS DE IMPRESIÓN --- */
+@media print {
+    body * {
+        visibility: hidden; /* Oculta todo */
+    }
+    #detalle-content, #detalle-content * {
+        visibility: visible; /* Solo muestra el contenido del presupuesto */
+    }
+    #detalle-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        padding: 0;
+        box-shadow: none;
+    }
+    .hidden-print {
+        display: none !important;
+    }
+}
 
 /* Vista Gestión */
 .filtros-gestion {
@@ -1097,9 +1198,9 @@
                         </button>
                         <h1>Detalle del Presupuesto</h1>
                     </div>
-                    <button class="btn btn-primary" onclick="window.print()">
-                        🖨️ Imprimir
-                    </button>
+                   <button class="btn btn-primary hidden-print" onclick="window.print()">
+    🖨️ Imprimir Presupuesto
+</button>
                 </div>
 
                 <div class="card" id="detalle-content"></div>
