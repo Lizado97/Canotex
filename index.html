@@ -806,8 +806,12 @@
     </style>
 </head>
 <body>
+ <div id="loading-screen" style="text-align: center; padding-top: 50vh;">Verificando sesión...</div>
+ 
 
-    <!-- Botón Hamburguesa -->
+    <div class="container" id="main-app-content" style="display: none;">
+        <!-- Vista Dashboard -->
+         <!-- Botón Hamburguesa -->
 <button class="btn-hamburguesa" onclick="toggleMenu()">
     <span></span>
 </button>
@@ -835,9 +839,6 @@
         </button>
     </div>
 </div>
-
-    <div class="container" id="main-app-content" style="display: none;">
-        <!-- Vista Dashboard -->
         <div id="dashboard-view">
             <div class="header">
                 <div>
