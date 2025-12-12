@@ -517,12 +517,17 @@
     border-radius: 6px 6px 0 0;
     position: relative;
     min-height: 5px; /* Altura mínima por si no hay datos */
-    transition: all 0.3s;
+    transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .barra:hover {
-    transform: scaleY(1.05);
+    transform: scaleX(1.1); /* Se ensancha un poco */
+    filter: brightness(1.3); /* Brilla más */
+    z-index: 10;
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+        .barra:active {
+    transform: scale(0.95); /* Efecto de pulsación */
 }
 
 .barra-label {
@@ -2064,10 +2069,8 @@ function cargarGraficaMensual() {
     const nombresMeses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
     const anioActual = new Date().getFullYear();
     
-    // Crear un array de 12 posiciones inicializado en 0
     const conteoPorMes = new Array(12).fill(0);
 
-    // Llenar el array con los datos reales del año actual
     presupuestos.forEach(p => {
         const fecha = new Date(p.fecha);
         if (fecha.getFullYear() === anioActual) {
@@ -2079,24 +2082,48 @@ function cargarGraficaMensual() {
     const contenedor = document.getElementById('grafica-barras');
     contenedor.innerHTML = '';
 
-    // Generar las 12 barras
     conteoPorMes.forEach((valor, i) => {
         const altura = (valor / maxValor) * 100;
-        
         const barra = document.createElement('div');
         barra.className = 'barra';
-        barra.style.height = `${Math.max(altura, 5)}%`; // Mínimo 5% para que se vea algo si hay 0
+        barra.style.height = `${Math.max(altura, 5)}%`;
+        barra.style.cursor = 'pointer'; // Cursor de mano para indicar que es clicable
         
         barra.innerHTML = `
             <div class="barra-valor">${valor}</div>
             <div class="barra-label">${nombresMeses[i]}</div>
         `;
-        
-        // Efecto hover simple para mostrar el mes completo si lo deseas
-        barra.title = `${nombresMeses[i]}: ${valor} presupuestos`;
+
+        // EVENTO CLIC: Al pulsar la barra, filtramos los datos
+        barra.onclick = () => filtrarPorMes(i, anioActual);
         
         contenedor.appendChild(barra);
     });
+}
+        function filtrarPorMes(mesIndex, anio) {
+    const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
+    
+    // Filtrar los datos reales
+    const filtrados = presupuestos.filter(p => {
+        const fecha = new Date(p.fecha);
+        return fecha.getMonth() === mesIndex && fecha.getFullYear() === anio;
+    });
+
+    if (filtrados.length === 0) {
+        alert("No hay presupuestos para este mes.");
+        return;
+    }
+
+    // Aquí llamamos a tu función de renderizar tabla (suponiendo que se llama renderizarTabla)
+    // Y cambiamos a la vista donde está la tabla (suponiendo que es 'gestion')
+    mostrarVista('gestion'); 
+    actualizarTablaConFiltro(filtrados, `Presupuestos de ${obtenerNombreMesCompleto(mesIndex)}`);
+}
+
+// Función auxiliar para el título dinámico
+function obtenerNombreMesCompleto(index) {
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return meses[index];
 }
 
     </script>
