@@ -1066,15 +1066,21 @@
                                 </div>
 
                                 <div class="form-group" style="z-index: 10000; position: relative;">
-                                    <label>Tejido * <small>(Buscar por nombre)</small></label>
-                                    <div class="search-box">
-                                        <input type="text" id="tejido-search" placeholder="Buscar tejido..."
-                                            oninput="buscarTejido()">
-                                        <div id="search-results" class="search-results hidden"></div>
-                                    </div>
-                                    <input type="hidden" id="tejido">
-                                </div>
-                            </div>
+    <label>Tejido * <small>(Buscar por nombre)</small></label>
+    <div class="search-box">
+        <input type="text" id="tejido-search" placeholder="Buscar tejido..."
+            oninput="buscarTejido()">
+        <div id="search-results" class="search-results hidden"></div>
+    </div>
+    <input type="hidden" id="tejido">
+</div>
+
+<div class="form-group" id="color-container" style="display: none;">
+    <label>Color del Tejido *</label>
+    <select id="tejido-color">
+        <option value="">Selecciona el color...</option>
+    </select>
+</div>
 
                             <div class="step-box step-blue">
                                 <div class="step-header">
@@ -1483,6 +1489,16 @@
             { nombre: "YECLA 51-52-53", precio: 47.88, ancho: 300, composicion: "50% Pes 50% Li" },
             { nombre: "ZAHARA", precio: 41.11, ancho: 300, composicion: "90% Pol 10% Li" }
         ];
+        const COLORES_TEJIDOS = {
+    "AALBORG 60-61-64": ["60 Beige", "61 Gris", "64 Azul"],
+    "AALBORG 90-91-94": ["90 Blanco", "91 Crema", "94 Verde"],
+    "ABI": ["01 Blanco", "02 Crudo", "03 Beige", "04 Gris"],
+    "ACHIRA": ["01 Natural", "02 Arena", "03 Piedra"],
+    // Agrega los colores de cada tejido aquí
+    // Por defecto si no tiene colores:
+    "default": ["Color único"]
+};
+
 
        const SISTEMAS = {
     "Estor a Cadena - Paquetto": {75:52.20, 100:57.38, 125:67.80, 150:77.19, 175:79.18, 200:88.61, 225:103.04, 250:107.97, 275:117.27, 300:126.66},
@@ -1688,21 +1704,25 @@ function mostrarOpcionesBarras() {
             searchResults.classList.remove('hidden');
         }
 
-        function seleccionarTejido(nombre) {
-            document.getElementById('tejido-search').value = nombre;
-            document.getElementById('tejido').value = nombre;
-            document.getElementById('search-results').classList.add('hidden');
-        }
-
-        document.addEventListener('click', function(e) {
-            const searchBox = document.querySelector('.search-box');
-            if (searchBox && !searchBox.contains(e.target)) {
-                const results = document.getElementById('search-results');
-                if (results) {
-                    results.classList.add('hidden');
-                }
-            }
-        });
+     function seleccionarTejido(nombre) {
+    document.getElementById('tejido-search').value = nombre;
+    document.getElementById('tejido').value = nombre;
+    document.getElementById('search-results').classList.add('hidden');
+    
+    // Cargar colores del tejido
+    const colores = COLORES_TEJIDOS[nombre] || COLORES_TEJIDOS["default"];
+    const selectColor = document.getElementById('tejido-color');
+    selectColor.innerHTML = '<option value="">Selecciona el color...</option>';
+    
+    colores.forEach(color => {
+        const option = document.createElement('option');
+        option.value = color;
+        option.textContent = color;
+        selectColor.appendChild(option);
+    });
+    
+    document.getElementById('color-container').style.display = 'block';
+}
 
         function mostrarVista(vista) {
     document.getElementById('dashboard-view').classList.add('hidden');
@@ -1741,6 +1761,7 @@ function mostrarOpcionesBarras() {
     const ancho = parseFloat(document.getElementById('ancho').value);
     const alto = parseFloat(document.getElementById('alto').value);
     const tejidoNombre = document.getElementById('tejido').value;
+    const tejidoColor = document.getElementById('tejido-color').value;        
     const sistemaNombre = document.getElementById('sistema').value;  // ← FALTABA ESTO
     
     let sistemaNombreCompleto = sistemaNombre || 'Sin sistema';
@@ -1759,10 +1780,10 @@ function mostrarOpcionesBarras() {
 
     const dosPiezas = document.getElementById('dos-piezas').checked;
 
-    if (!tipo || !ancho || !alto || !tejidoNombre) {
-        alert('Por favor completa todos los campos obligatorios');
-        return;
-    }
+   if (!tipo || !ancho || !alto || !tejidoNombre || !tejidoColor) {
+    alert('Por favor completa todos los campos obligatorios (incluido el color del tejido)');
+    return;
+}
 
     const tejido = TEJIDOS.find(t => t.nombre === tejidoNombre);
     const anchoParaTejido = dosPiezas ? ancho / 2 : ancho;
@@ -1827,10 +1848,11 @@ function mostrarOpcionesBarras() {
         precioOllados + 
         precioInstalacion;
 
-    const item = {
+        const item = {
         id: editandoItemId || Date.now(),
         tipo,
-        descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre}${dosPiezas ? ' (2 piezas)' : ''}`,
+        descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre} (${tejidoColor})${dosPiezas ? ' (2 piezas)' : ''}`,
+        tejido_color: tejidoColor,
         ancho, alto,
         tejido_nombre: tejidoNombre,
         sistema_nombre: sistemaNombreCompleto,
@@ -1855,6 +1877,8 @@ function mostrarOpcionesBarras() {
     document.getElementById('alto').value = '';
     document.getElementById('tejido').value = '';
     document.getElementById('tejido-search').value = '';
+    document.getElementById('tejido-color').value = '';
+    document.getElementById('color-container').style.display = 'none';
     document.getElementById('sistema').value = '';
     document.getElementById('dos-piezas').checked = false;
 }
@@ -1874,6 +1898,11 @@ function mostrarOpcionesBarras() {
     document.getElementById('alto').value = item.alto;
     document.getElementById('tejido').value = item.tejido_nombre;
     document.getElementById('tejido-search').value = item.tejido_nombre;
+            // Cargar color
+if (item.tejido_color) {
+    seleccionarTejido(item.tejido_nombre);
+    document.getElementById('tejido-color').value = item.tejido_color;
+}
     
     // Manejar sistema - detectar si es barra de forja
     const sistemaNombreBase = item.sistema_nombre.split(' ')[0] + ' ' + item.sistema_nombre.split(' ')[1] + ' ' + item.sistema_nombre.split(' ')[2];
