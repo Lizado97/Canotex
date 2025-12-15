@@ -1722,6 +1722,7 @@ function mostrarOpcionesBarras() {
         btnGuardar.innerHTML = '💾 Guardar Presupuesto';
         btnGuardar.style.background = 'white';
         btnGuardar.style.color = '#2563eb';
+    }
     } else if (vista === 'detalle') {
         document.getElementById('detalle-view').classList.remove('hidden');
     } else if (vista === 'gestion') {
@@ -1978,13 +1979,6 @@ function mostrarOpcionesBarras() {
     
     mostrarVista('dashboard');
 }
-
-            let presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
-            presupuestos.push(presupuesto);
-            localStorage.setItem('presupuestos', JSON.stringify(presupuestos));
-            alert('✅ Presupuesto guardado correctamente');
-            mostrarVista('dashboard');
-        }
 
         function cargarDashboard() {
             const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
