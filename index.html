@@ -1493,10 +1493,28 @@
         const COLORES_TEJIDOS = {
     "AALBORG 60-61-64": ["60 Beige", "61 Gris", "64 Azul"],
     "AALBORG 90-91-94": ["90 Blanco", "91 Crema", "94 Verde"],
-    "ABI": ["01 Blanco", "02 Crudo", "03 Beige", "04 Gris"],
-    "ACHIRA": ["01 Natural", "02 Arena", "03 Piedra"],
-    // Agrega los colores de cada tejido aquí
-    // Por defecto si no tiene colores:
+    "ABI": ["01 Blanco", "02 Crudo", "03 Beige", "04 Gris", "05 Azul", "06 Verde"],
+    "ACHIRA": ["01 Natural", "02 Arena", "03 Piedra", "04 Gris"],
+    "AKINA": ["01 Blanco", "02 Beige", "03 Gris", "04 Azul"],
+    "ALIDA GRIS": ["Color único - Gris"],
+    "ALISHA": ["01 Blanco", "02 Beige", "03 Gris"],
+    "ANOUK GRIS": ["Color único - Gris"],
+    "ASPEN BCO/CRUDO": ["Blanco", "Crudo"],
+    "ASPEN LINO": ["Lino Natural"],
+    "ASTIN GRIS": ["Color único - Gris"],
+    "ELISE BCO/CRUDO": ["Blanco", "Crudo"],
+    "ELISE LINO": ["Lino Natural"],
+    "LINETTE BLACKOUT": ["01 Blanco", "02 Beige", "03 Gris", "04 Negro"],
+    "MILAN BCO/CRUDO": ["Blanco", "Crudo"],
+    "PROVENCAL AZUL": ["Color único - Azul"],
+    "PROVENCAL GRIS": ["Color único - Gris"],
+    "PROVENCAL ROJO": ["Color único - Rojo"],
+    "RALPH BCO/CRUDO": ["Blanco", "Crudo"],
+    "RALPH LINO": ["Lino Natural"],
+    "YECLA 01-02-03": ["01 Beige", "02 Gris", "03 Azul"],
+    "YECLA 11-12-13": ["11 Blanco", "12 Crema", "13 Arena"],
+    "YECLA 41-42-43": ["41 Verde", "42 Azul", "43 Gris"],
+    "YECLA 51-52-53": ["51 Rosa", "52 Lila", "53 Morado"],
     "default": ["Color único"]
 };
 
@@ -1724,6 +1742,15 @@ function mostrarOpcionesBarras() {
     
     document.getElementById('color-container').style.display = 'block';
 }
+document.addEventListener('click', function(e) {
+    const searchBox = document.querySelector('.search-box');
+    if (searchBox && !searchBox.contains(e.target)) {
+        const results = document.getElementById('search-results');
+        if (results) {
+            results.classList.add('hidden');
+        }
+    }
+});
 
         function mostrarVista(vista) {
     document.getElementById('dashboard-view').classList.add('hidden');
@@ -2344,31 +2371,20 @@ function cargarGraficaMensual() {
         contenedor.appendChild(barra);
     });
 }
-        function filtrarPorMes(mesIndex, anio) {
-    const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
+       function filtrarPorMes(mesIndex, anio) {
+    const primerDia = new Date(anio, mesIndex, 1);
+    const ultimoDia = new Date(anio, mesIndex + 1, 0);
     
-    // Filtrar los datos reales
-    const filtrados = presupuestos.filter(p => {
-        const fecha = new Date(p.fecha);
-        return fecha.getMonth() === mesIndex && fecha.getFullYear() === anio;
-    });
-
-    if (filtrados.length === 0) {
-        alert("No hay presupuestos para este mes.");
-        return;
-    }
-
-    // Aquí llamamos a tu función de renderizar tabla (suponiendo que se llama renderizarTabla)
-    // Y cambiamos a la vista donde está la tabla (suponiendo que es 'gestion')
-    mostrarVista('gestion'); 
-    actualizarTablaConFiltro(filtrados, `Presupuestos de ${obtenerNombreMesCompleto(mesIndex)}`);
+    document.getElementById('filtro-nombre').value = '';
+    document.getElementById('filtro-numero').value = '';
+    document.getElementById('filtro-fecha-desde').value = primerDia.toISOString().split('T')[0];
+    document.getElementById('filtro-fecha-hasta').value = ultimoDia.toISOString().split('T')[0];
+    
+    mostrarVista('gestion');
+    filtrarPresupuestos();
 }
 
-// Función auxiliar para el título dinámico
-function obtenerNombreMesCompleto(index) {
-    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-    return meses[index];
-}
+
 
     </script>
 </body>
