@@ -1714,11 +1714,13 @@ function mostrarOpcionesBarras() {
     if (vista === 'dashboard') {
         document.getElementById('dashboard-view').classList.remove('hidden');
         cargarDashboard();
-    } else if (vista === 'nuevo') {
+} else if (vista === 'nuevo') {
     document.getElementById('nuevo-view').classList.remove('hidden');
-    limpiarFormulario();
+    if (!editandoPresupuestoId) {
+        limpiarFormulario();
+    }
     const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
-    if (btnGuardar) {
+    if (btnGuardar && !editandoPresupuestoId) {
         btnGuardar.innerHTML = '💾 Guardar Presupuesto';
         btnGuardar.style.background = 'white';
         btnGuardar.style.color = '#2563eb';
@@ -2135,18 +2137,19 @@ function mostrarOpcionesBarras() {
         }
 
         function limpiarFormulario() {
-            document.getElementById('cliente-nombre').value = '';
-            document.getElementById('cliente-telefono').value = '';
-            document.getElementById('cliente-email').value = '';
-            document.getElementById('cliente-direccion').value = '';
-            document.getElementById('notas').value = '';
-            document.getElementById('incluir-instalacion').checked = false;
-            document.getElementById('btn-texto').textContent = '➕ Calcular y Agregar al Presupuesto';
-            itemsActuales = [];
-            actualizarItems();
-            actualizarResumen();
-            editandoPresupuestoId = null;
-        }
+    document.getElementById('cliente-nombre').value = '';
+    document.getElementById('cliente-telefono').value = '';
+    document.getElementById('cliente-email').value = '';
+    document.getElementById('cliente-direccion').value = '';
+    document.getElementById('notas').value = '';
+    document.getElementById('incluir-instalacion').checked = false;
+    document.getElementById('btn-texto').textContent = '➕ Agregar al Presupuesto';
+    itemsActuales = [];
+    editandoItemId = null;
+    editandoPresupuestoId = null;
+    actualizarItems();
+    actualizarResumen();
+}
       
    
 function editarPresupuesto(id, event) {
@@ -2155,6 +2158,16 @@ function editarPresupuesto(id, event) {
     const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
     const p = presupuestos.find(pr => pr.id === id);
     if (!p) return;
+    
+    // Primero establecemos el ID de edición ANTES de cambiar vista
+    editandoPresupuestoId = id;
+    
+    // Cambiar vistas manualmente SIN llamar a mostrarVista para evitar limpiarFormulario
+    document.getElementById('dashboard-view').classList.add('hidden');
+    document.getElementById('gestion-view').classList.add('hidden');
+    document.getElementById('detalle-view').classList.add('hidden');
+    document.getElementById('grafica-view').classList.add('hidden');
+    document.getElementById('nuevo-view').classList.remove('hidden');
     
     // Cargar datos del cliente
     document.getElementById('cliente-nombre').value = p.cliente_nombre || '';
@@ -2166,29 +2179,23 @@ function editarPresupuesto(id, event) {
     // Cargar items CON toda su información
     itemsActuales = (p.items || []).map(item => ({
         ...item,
-        id: item.id || Date.now() + Math.random() // Asegurar que tenga ID
+        id: item.id || Date.now() + Math.random()
     }));
     
     actualizarItems();
     actualizarResumen();
-    
-    // Guardar ID del presupuesto en edición
-    editandoPresupuestoId = id;
-    
-    // Cambiar a vista de edición
-    mostrarVista('nuevo');
     
     // Cambiar texto del botón de guardar
     const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
     if (btnGuardar) {
         btnGuardar.innerHTML = '💾 Actualizar Presupuesto';
         btnGuardar.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+        btnGuardar.style.color = 'white';
     }
     
     // Scroll al inicio
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
       
     
       // Funciones del Menú
