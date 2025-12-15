@@ -866,31 +866,31 @@
                 margin-right: 0;
             }
         }
+@media print {
+    body {
+        background: white;
+        color: #000 !important;
+    }
+    
+    body::before {
+        display: none;
+    }
+    
+    .btn, .hidden-print {
+        display: none !important;
+    }
 
-        @media print {
-            body {
-                background: white;
-            }
-            
-            body::before {
-                display: none;
-            }
-            
-            .btn, .hidden-print {
-                display: none !important;
-            }
-
-            .card {
-                box-shadow: none;
-                border: 1px solid #e2e8f0;
-                background: white;
-            }
-            
-            .card h2, .header h1, .item-price {
-                -webkit-text-fill-color: initial;
-                color: #8EA4D1;
-            }
-        }
+    .card {
+        box-shadow: none;
+        border: 1px solid #e2e8f0;
+        background: white;
+    }
+    
+    .card h2, .header h1, .item-price, .card *, #detalle-content * {
+        -webkit-text-fill-color: #000 !important;
+        color: #000 !important;
+    }
+}
 
         /* Scrollbar personalizado */
         ::-webkit-scrollbar {
@@ -1872,14 +1872,45 @@ function mostrarOpcionesBarras() {
     document.getElementById('alto').value = item.alto;
     document.getElementById('tejido').value = item.tejido_nombre;
     document.getElementById('tejido-search').value = item.tejido_nombre;
-    document.getElementById('sistema').value = item.sistema_nombre === 'Sin sistema' ? '' : item.sistema_nombre;
+    
+    // Manejar sistema - detectar si es barra de forja
+    const sistemaNombreBase = item.sistema_nombre.split(' ')[0] + ' ' + item.sistema_nombre.split(' ')[1] + ' ' + item.sistema_nombre.split(' ')[2];
+    const esForja = Object.keys(SISTEMAS).some(s => SISTEMAS[s] === 'forja' && item.sistema_nombre.includes(s));
+    
+    if (esForja) {
+        // Extraer el nombre exacto del sistema de forja
+        let sistemaForja = '';
+        Object.keys(SISTEMAS).forEach(s => {
+            if (SISTEMAS[s] === 'forja' && item.sistema_nombre.includes(s)) {
+                sistemaForja = s;
+            }
+        });
+        
+        document.getElementById('sistema').value = sistemaForja;
+        mostrarOpcionesBarras();
+        
+        // Extraer diámetro y medida del nombre del sistema
+        const match = item.sistema_nombre.match(/(\d+)mm - (\d+)cm/);
+        if (match) {
+            document.getElementById('diametro-barra').value = match[1];
+            document.getElementById('medida-barra').value = match[2];
+        } else {
+            // Barra cuadrada (sin diámetro)
+            const matchMedida = item.sistema_nombre.match(/(\d+)cm/);
+            if (matchMedida) {
+                document.getElementById('medida-barra').value = matchMedida[1];
+            }
+        }
+    } else {
+        document.getElementById('sistema').value = item.sistema_nombre === 'Sin sistema' ? '' : item.sistema_nombre;
+    }
+    
     document.getElementById('dos-piezas').checked = item.dos_piezas;
     document.getElementById('btn-texto').textContent = '✏️ Actualizar Item';
     
     editandoItemId = id;
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
         function actualizarItems() {
             const lista = document.getElementById('items-list');
             const card = document.getElementById('items-card');
@@ -2132,8 +2163,12 @@ function editarPresupuesto(id, event) {
     document.getElementById('cliente-direccion').value = p.cliente_direccion || '';
     document.getElementById('notas').value = p.notas || '';
     
-    // Cargar items
-    itemsActuales = p.items || [];
+    // Cargar items CON toda su información
+    itemsActuales = (p.items || []).map(item => ({
+        ...item,
+        id: item.id || Date.now() + Math.random() // Asegurar que tenga ID
+    }));
+    
     actualizarItems();
     actualizarResumen();
     
@@ -2149,6 +2184,9 @@ function editarPresupuesto(id, event) {
         btnGuardar.innerHTML = '💾 Actualizar Presupuesto';
         btnGuardar.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
     }
+    
+    // Scroll al inicio
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
       
@@ -2203,10 +2241,11 @@ function filtrarPresupuestos() {
             <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
             <td>${p.items.length}</td>
             <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
-            <td style="text-align: center;">
-                <button class="btn btn-primary" onclick="verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">👁️ Ver</button>
-                <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
-            </td>
+           <td style="text-align: center;">
+    <button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+    <button class="btn btn-primary" onclick="verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
+    <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
+</td>
         `;
         tbody.appendChild(tr);
     });
