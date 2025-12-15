@@ -1855,13 +1855,8 @@ function getColorHex(colorName) {
 }
 
      function mostrarVista(vista) {
-   else if (vista === 'nuevo') {
-    cargarBorrador(); // ← AÑADIR ESTA LÍNEA
-    if (!editandoPresupuestoId) {
-        limpiarFormulario();
-    }
-}
-         // Ocultar todas con fade out
+   elfunction mostrarVista(vista) {
+    // Ocultar todas con fade out
     const vistas = ['dashboard-view', 'nuevo-view', 'detalle-view', 'gestion-view', 'grafica-view'];
     vistas.forEach(v => {
         const elem = document.getElementById(v);
@@ -1879,6 +1874,7 @@ function getColorHex(colorName) {
         if (vista === 'dashboard') {
             cargarDashboard();
         } else if (vista === 'nuevo') {
+            cargarBorrador();
             if (!editandoPresupuestoId) {
                 limpiarFormulario();
             }
