@@ -276,6 +276,36 @@
         .hidden {
             display: none !important;
         }
+        /* Animaciones de transición */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
 
         .tabla {
             width: 100%;
@@ -709,6 +739,41 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
             margin-top: 0.5rem;
         }
+        .color-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.color-option {
+    padding: 0.75rem;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.color-option:hover {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.1);
+    transform: scale(1.05);
+}
+
+.color-option.selected {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.color-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 auto 0.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
 
         .search-result-item {
             padding: 1rem;
@@ -815,57 +880,76 @@
         }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
     .header {
-        padding: 4rem 1.25rem 1.25rem 1.25rem; /* En móvil, ponemos el botón arriba del todo */
+        padding: 4rem 1rem 1rem 1rem;
         flex-direction: column;
         text-align: center;
+        gap: 1rem;
+    }
+    
+    .header h1 {
+        font-size: 1.5rem;
     }
     
     .btn-hamburguesa {
         top: 1rem;
         left: 50%;
-        transform: translateX(-50%); /* Centrado horizontal en móvil */
+        transform: translateX(-50%);
+    }
+    
+    .btn {
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .card {
+        padding: 1rem;
+    }
+    
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .resumen {
+        position: static;
+        margin-top: 1.5rem;
+    }
+    
+    .item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .item-price {
+        align-self: flex-end;
+        font-size: 1.5rem;
+    }
+    
+    /* Tablas responsivas */
+    .tabla-wrapper {
+        overflow-x: auto;
+    }
+    
+    .tabla {
+        min-width: 600px;
+    }
+    
+    .tabla th, .tabla td {
+        padding: 0.75rem;
+        font-size: 0.875rem;
     }
 }
-            .header h1 {
-                font-size: 1.25rem;
-            }
-
-            .btn {
-                padding: 0.625rem 1rem;
-                font-size: 0.875rem;
-                justify-content: center;
-                width: 100%;
-            }
-
-            .card {
-                padding: 1.25rem;
-            }
-
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .resumen {
-                position: static;
-                margin-top: 1rem;
-            }
-
-            .item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.75rem;
-            }
-
-            .item-price {
-                align-self: flex-end;
-                margin-right: 0;
-            }
-        }
 @media print {
     body {
         background: white;
@@ -1192,6 +1276,10 @@
                                     <span id="total">0.00€</span>
                                 </div>
                             </div>
+                            <button class="btn" onclick="guardarBorrador()"
+    style="width: 100%; background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); margin-bottom: 1rem;">
+    📝 Guardar Borrador
+</button>
                             <button class="btn" onclick="guardarPresupuesto()"
                                 style="width: 100%; background: white; color: #2563eb; margin-top: 2rem; font-weight: bold;">
                                 💾 Guardar Presupuesto
@@ -1728,60 +1816,78 @@ function mostrarOpcionesBarras() {
     document.getElementById('tejido').value = nombre;
     document.getElementById('search-results').classList.add('hidden');
     
-    // Cargar colores del tejido
     const colores = COLORES_TEJIDOS[nombre] || COLORES_TEJIDOS["default"];
-    const selectColor = document.getElementById('tejido-color');
-    selectColor.innerHTML = '<option value="">Selecciona el color...</option>';
+    const container = document.getElementById('color-container');
     
-    colores.forEach(color => {
-        const option = document.createElement('option');
-        option.value = color;
-        option.textContent = color;
-        selectColor.appendChild(option);
-    });
+    container.innerHTML = `
+        <label>Color del Tejido *</label>
+        <div class="color-options">
+            ${colores.map(color => `
+                <div class="color-option" onclick="seleccionarColor('${color}', this)">
+                    <div class="color-circle" style="background: ${getColorHex(color)}"></div>
+                    <div style="font-size: 0.75rem; color: #cbd5e1;">${color}</div>
+                </div>
+            `).join('')}
+        </div>
+    `;
     
-    document.getElementById('color-container').style.display = 'block';
+    container.style.display = 'block';
 }
-document.addEventListener('click', function(e) {
-    const searchBox = document.querySelector('.search-box');
-    if (searchBox && !searchBox.contains(e.target)) {
-        const results = document.getElementById('search-results');
-        if (results) {
-            results.classList.add('hidden');
-        }
-    }
-});
 
-        function mostrarVista(vista) {
-    document.getElementById('dashboard-view').classList.add('hidden');
-    document.getElementById('nuevo-view').classList.add('hidden');
-    document.getElementById('detalle-view').classList.add('hidden');
-    document.getElementById('gestion-view').classList.add('hidden');
-    document.getElementById('grafica-view').classList.add('hidden');
+function seleccionarColor(color, elem) {
+    document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+    elem.classList.add('selected');
+    document.getElementById('tejido-color').value = color;
+}
+
+function getColorHex(colorName) {
+    const colores = {
+        'Blanco': '#f8fafc', 'Crudo': '#fef3c7', 'Beige': '#d6c8a8',
+        'Gris': '#94a3b8', 'Azul': '#3b82f6', 'Verde': '#10b981',
+        'Lino': '#e8dcc4', 'Negro': '#1e293b', 'Arena': '#c2b280',
+        'Rosa': '#f472b6', 'Lila': '#a78bfa', 'Morado': '#8b5cf6'
+    };
     
-    if (vista === 'dashboard') {
-        document.getElementById('dashboard-view').classList.remove('hidden');
-        cargarDashboard();
-} else if (vista === 'nuevo') {
-    document.getElementById('nuevo-view').classList.remove('hidden');
+    for (let key in colores) {
+        if (colorName.includes(key)) return colores[key];
+    }
+    return '#cbd5e1';
+}
+
+     function mostrarVista(vista) {
+   else if (vista === 'nuevo') {
+    cargarBorrador(); // ← AÑADIR ESTA LÍNEA
     if (!editandoPresupuestoId) {
         limpiarFormulario();
     }
-    const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
-    if (btnGuardar && !editandoPresupuestoId) {
-        btnGuardar.innerHTML = '💾 Guardar Presupuesto';
-        btnGuardar.style.background = 'white';
-        btnGuardar.style.color = '#2563eb';
-    }
-    } else if (vista === 'detalle') {
-        document.getElementById('detalle-view').classList.remove('hidden');
-    } else if (vista === 'gestion') {
-        document.getElementById('gestion-view').classList.remove('hidden');
-        cargarGestion();
-    } else if (vista === 'grafica') {
-        document.getElementById('grafica-view').classList.remove('hidden');
-        cargarGraficaMensual();
-    }
+}
+         // Ocultar todas con fade out
+    const vistas = ['dashboard-view', 'nuevo-view', 'detalle-view', 'gestion-view', 'grafica-view'];
+    vistas.forEach(v => {
+        const elem = document.getElementById(v);
+        elem.style.opacity = '0';
+        setTimeout(() => elem.classList.add('hidden'), 200);
+    });
+    
+    // Mostrar la vista seleccionada con fade in
+    setTimeout(() => {
+        const vistaActual = document.getElementById(vista + '-view');
+        vistaActual.classList.remove('hidden');
+        vistaActual.classList.add('fade-in');
+        setTimeout(() => vistaActual.style.opacity = '1', 10);
+        
+        if (vista === 'dashboard') {
+            cargarDashboard();
+        } else if (vista === 'nuevo') {
+            if (!editandoPresupuestoId) {
+                limpiarFormulario();
+            }
+        } else if (vista === 'gestion') {
+            cargarGestion();
+        } else if (vista === 'grafica') {
+            cargarGraficaMensual();
+        }
+    }, 220);
 }
 
         function agregarItem() {
@@ -2069,6 +2175,36 @@ if (item.tejido_color) {
     
     mostrarVista('dashboard');
 }
+        function guardarBorrador() {
+    const borrador = {
+        cliente_nombre: document.getElementById('cliente-nombre').value,
+        cliente_telefono: document.getElementById('cliente-telefono').value,
+        cliente_email: document.getElementById('cliente-email').value,
+        cliente_direccion: document.getElementById('cliente-direccion').value,
+        items: itemsActuales,
+        notas: document.getElementById('notas').value,
+        fecha_guardado: new Date().toISOString()
+    };
+    
+    localStorage.setItem('borrador_actual', JSON.stringify(borrador));
+    alert('📝 Borrador guardado correctamente');
+}
+
+function cargarBorrador() {
+    const borrador = JSON.parse(localStorage.getItem('borrador_actual') || 'null');
+    if (!borrador) return;
+    
+    if (confirm('¿Cargar el último borrador guardado?')) {
+        document.getElementById('cliente-nombre').value = borrador.cliente_nombre || '';
+        document.getElementById('cliente-telefono').value = borrador.cliente_telefono || '';
+        document.getElementById('cliente-email').value = borrador.cliente_email || '';
+        document.getElementById('cliente-direccion').value = borrador.cliente_direccion || '';
+        document.getElementById('notas').value = borrador.notas || '';
+        itemsActuales = borrador.items || [];
+        actualizarItems();
+        actualizarResumen();
+    }
+}
 
         function cargarDashboard() {
             const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
@@ -2353,19 +2489,25 @@ function cargarGraficaMensual() {
     const contenedor = document.getElementById('grafica-barras');
     contenedor.innerHTML = '';
 
+    const colores = [
+        '#3b82f6', '#6366f1', '#8b5cf6', '#a78bfa', 
+        '#10b981', '#14b8a6', '#f59e0b', '#f97316',
+        '#ef4444', '#ec4899', '#8b5cf6', '#6366f1'
+    ];
+
     conteoPorMes.forEach((valor, i) => {
         const altura = (valor / maxValor) * 100;
         const barra = document.createElement('div');
         barra.className = 'barra';
         barra.style.height = `${Math.max(altura, 5)}%`;
-        barra.style.cursor = 'pointer'; // Cursor de mano para indicar que es clicable
+        barra.style.background = `linear-gradient(180deg, ${colores[i]} 0%, ${colores[i]}dd 100%)`;
+        barra.style.cursor = 'pointer';
         
         barra.innerHTML = `
             <div class="barra-valor">${valor}</div>
             <div class="barra-label">${nombresMeses[i]}</div>
         `;
 
-        // EVENTO CLIC: Al pulsar la barra, filtramos los datos
         barra.onclick = () => filtrarPorMes(i, anioActual);
         
         contenedor.appendChild(barra);
