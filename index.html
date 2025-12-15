@@ -1854,36 +1854,59 @@ function getColorHex(colorName) {
     return '#cbd5e1';
 }
 
-     function mostrarVista(vista) {
-    // Ocultar todas con fade out
+    // Asegúrate de definir esta variable al inicio de tu archivo JS si no existe
+let editandoPresupuestoId = null; 
+
+function mostrarVista(vista) {
+    // 1. Ocultar todas las vistas
     const vistas = ['dashboard-view', 'nuevo-view', 'detalle-view', 'gestion-view', 'grafica-view'];
+    
     vistas.forEach(v => {
         const elem = document.getElementById(v);
-        elem.style.opacity = '0';
-        setTimeout(() => elem.classList.add('hidden'), 200);
+        if (elem) { // Pequeña seguridad por si el ID no existe
+            elem.style.opacity = '0';
+            setTimeout(() => elem.classList.add('hidden'), 200);
+        }
     });
     
-    // Mostrar la vista seleccionada con fade in
+    // 2. Mostrar la vista seleccionada con un pequeño retraso para la animación
     setTimeout(() => {
         const vistaActual = document.getElementById(vista + '-view');
-        vistaActual.classList.remove('hidden');
-        vistaActual.classList.add('fade-in');
-        setTimeout(() => vistaActual.style.opacity = '1', 10);
         
-        if (vista === 'dashboard') {
-            cargarDashboard();
-        } else if (vista === 'nuevo') {
-            cargarBorrador();
-            if (!editandoPresupuestoId) {
-                limpiarFormulario();
+        if (vistaActual) {
+            vistaActual.classList.remove('hidden');
+            // Forzar un reflow para que la transición CSS funcione
+            void vistaActual.offsetWidth; 
+            vistaActual.style.opacity = '1';
+            
+            // 3. Cargar datos específicos
+            try {
+                if (vista === 'dashboard') {
+                    if (typeof cargarDashboard === 'function') cargarDashboard();
+                } else if (vista === 'nuevo') {
+                    if (typeof cargarBorrador === 'function') cargarBorrador();
+                    // Verificamos si la variable existe para evitar crash
+                    if (typeof editandoPresupuestoId !== 'undefined' && !editandoPresupuestoId) {
+                        if (typeof limpiarFormulario === 'function') limpiarFormulario();
+                    }
+                } else if (vista === 'gestion') {
+                    if (typeof cargarGestion === 'function') cargarGestion();
+                } else if (vista === 'grafica') {
+                    if (typeof cargarGraficaMensual === 'function') cargarGraficaMensual();
+                }
+            } catch (error) {
+                console.error("Error cargando la vista:", error);
             }
-        } else if (vista === 'gestion') {
-            cargarGestion();
-        } else if (vista === 'grafica') {
-            cargarGraficaMensual();
         }
     }, 220);
 }
+
+// IMPORTANTE: ¿Tienes esta línea al final de tu archivo JS?
+// Es necesaria para que la app arranque mostrando algo al principio.
+document.addEventListener('DOMContentLoaded', () => {
+    mostrarVista('dashboard');
+});
+
 
         function agregarItem() {
     const tipo = document.getElementById('tipo-cortina').value;
