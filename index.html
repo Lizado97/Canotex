@@ -599,15 +599,19 @@
     padding: 2rem;
     border-radius: 20px;
     margin-top: 2rem;
+    box-shadow: 0 20px 60px 0 rgba(99, 102, 241, 0.3);
+   border: 2px solid rgba(99, 102, 241, 0.2);
 }
 
 .grafica-barras {
     display: flex;
     align-items: flex-end;
     justify-content: space-around;
-    height: 300px;
-    padding: 1rem;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.15); /* Cambiamos el color de la línea inferior a un gris claro y transparente */
+    height: 350px;
+    padding: 2rem;
+    border-bottom: 3px solid rgba(99, 102, 241, 0.3);
+    background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+    border-radius: 12px;
 }
 
 /* El color de la barra (barra) ya está bien (degradado azul/morado) */
@@ -949,10 +953,10 @@
                     <button class="btn-hamburguesa" onclick="toggleMenu()">
                 <span></span>
             </button>
-                    <div>
-                        <h1>🪟 Sistema de Presupuestos</h1>
-                        <p style="color: #94a3b8; margin-top: 0.5rem;">Gestión de presupuestos de cortinas (Modo Local)</p>
-                    </div>
+                   <div style="text-align: center; flex: 1;">
+    <h1>🪟 Sistema de Presupuestos</h1>
+    <p style="color: #94a3b8; margin-top: 0.5rem;">Gestión de presupuestos de cortinas (Modo Local)</p>
+</div>
                     <div style="display: flex; gap: 1rem;">
                         <button class="btn btn-primary" onclick="mostrarVista('nuevo')">
                             ➕ Nuevo Presupuesto
@@ -1138,7 +1142,7 @@
 
                             <button class="btn btn-success" onclick="agregarItem()"
                                 style="width: 100%; padding: 1rem; font-size: 1.1rem;">
-                                <span id="btn-texto">+ Calcular y Agregar</span>
+                                <span id="btn-texto">+ Agregar</span>
                             </button>
                         </div>
 
@@ -1272,7 +1276,7 @@
                 </div>
 
                 <div class="grafica-container">
-                    <h2 style="color: #1e293b; margin-bottom: 2rem;">📊 Presupuestos Mensuales</h2>
+                   <h2 style="color: #e2e8f0; margin-bottom: 2rem; font-size: 1.5rem; background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">📊 Presupuestos Mensuales</h2>
                     <div class="grafica-barras" id="grafica-barras"></div>
                 </div>
             </div>
@@ -1542,6 +1546,7 @@ const PRECIOS_BARRAS = {
 
         let itemsActuales = [];
         let editandoItemId = null;
+        let editandoPresupuestoId = null;
 
         document.addEventListener('DOMContentLoaded', function() {
             cargarSistemas();
@@ -1710,8 +1715,13 @@ function mostrarOpcionesBarras() {
         document.getElementById('dashboard-view').classList.remove('hidden');
         cargarDashboard();
     } else if (vista === 'nuevo') {
-        document.getElementById('nuevo-view').classList.remove('hidden');
-        limpiarFormulario();
+    document.getElementById('nuevo-view').classList.remove('hidden');
+    limpiarFormulario();
+    const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
+    if (btnGuardar) {
+        btnGuardar.innerHTML = '💾 Guardar Presupuesto';
+        btnGuardar.style.background = 'white';
+        btnGuardar.style.color = '#2563eb';
     } else if (vista === 'detalle') {
         document.getElementById('detalle-view').classList.remove('hidden');
     } else if (vista === 'gestion') {
@@ -1829,7 +1839,7 @@ function mostrarOpcionesBarras() {
         const index = itemsActuales.findIndex(i => i.id === editandoItemId);
         itemsActuales[index] = item;
         editandoItemId = null;
-        document.getElementById('btn-texto').textContent = '➕ Calcular y Agregar al Presupuesto';
+        document.getElementById('btn-texto').textContent = '➕ Agregar ';
     } else {
         itemsActuales.push(item);
     }
@@ -1910,34 +1920,64 @@ function mostrarOpcionesBarras() {
     document.getElementById('total').textContent = total.toFixed(2) + '€';
 }
 
-        function guardarPresupuesto() {
-            const nombre = document.getElementById('cliente-nombre').value;
-            if (!nombre) {
-                alert('Por favor ingresa el nombre del cliente');
-                return;
-            }
-            if (itemsActuales.length === 0) {
-                alert('Agrega al menos un item al presupuesto');
-                return;
-            }
+      function guardarPresupuesto() {
+    const nombre = document.getElementById('cliente-nombre').value;
+    if (!nombre) {
+        alert('Por favor ingresa el nombre del cliente');
+        return;
+    }
+    if (itemsActuales.length === 0) {
+        alert('Agrega al menos un item al presupuesto');
+        return;
+    }
 
-           const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
-           const total = subtotal * 1.21;
+    const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
+    const total = subtotal * 1.21;
 
-            const presupuesto = {
-    id: Date.now().toString(),
-    numero: String(JSON.parse(localStorage.getItem('presupuestos') || '[]').length + 1).padStart(4, '0'),
-    cliente_nombre: nombre,
-    cliente_telefono: document.getElementById('cliente-telefono').value,
-    cliente_email: document.getElementById('cliente-email').value,
-    cliente_direccion: document.getElementById('cliente-direccion').value,
-    fecha: new Date().toISOString().split('T')[0],
-    items: itemsActuales,
-    total_sin_iva: subtotal,
-    total_con_iva: total,
-    estado: 'borrador',
-    notas: document.getElementById('notas').value
-};
+    let presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
+    
+    if (editandoPresupuestoId) {
+        // MODO EDICIÓN: Actualizar presupuesto existente
+        const index = presupuestos.findIndex(p => p.id === editandoPresupuestoId);
+        if (index !== -1) {
+            presupuestos[index] = {
+                ...presupuestos[index],
+                cliente_nombre: nombre,
+                cliente_telefono: document.getElementById('cliente-telefono').value,
+                cliente_email: document.getElementById('cliente-email').value,
+                cliente_direccion: document.getElementById('cliente-direccion').value,
+                items: itemsActuales,
+                total_sin_iva: subtotal,
+                total_con_iva: total,
+                notas: document.getElementById('notas').value
+            };
+            localStorage.setItem('presupuestos', JSON.stringify(presupuestos));
+            alert('✅ Presupuesto actualizado correctamente');
+            editandoPresupuestoId = null;
+        }
+    } else {
+        // MODO NUEVO: Crear presupuesto nuevo
+        const presupuesto = {
+            id: Date.now().toString(),
+            numero: String(presupuestos.length + 1).padStart(4, '0'),
+            cliente_nombre: nombre,
+            cliente_telefono: document.getElementById('cliente-telefono').value,
+            cliente_email: document.getElementById('cliente-email').value,
+            cliente_direccion: document.getElementById('cliente-direccion').value,
+            fecha: new Date().toISOString().split('T')[0],
+            items: itemsActuales,
+            total_sin_iva: subtotal,
+            total_con_iva: total,
+            estado: 'borrador',
+            notas: document.getElementById('notas').value
+        };
+        presupuestos.push(presupuesto);
+        localStorage.setItem('presupuestos', JSON.stringify(presupuestos));
+        alert('✅ Presupuesto guardado correctamente');
+    }
+    
+    mostrarVista('dashboard');
+}
 
             let presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
             presupuestos.push(presupuesto);
@@ -1973,8 +2013,9 @@ function mostrarOpcionesBarras() {
                     <td>${p.items.length}</td>
                     <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
                     <td style="text-align: center;">
-                    <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
-                    </td>
+    <button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+    <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
+</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -2001,7 +2042,7 @@ function mostrarOpcionesBarras() {
                     <strong>⚠️ PRESUPUESTO ORIENTATIVO</strong>
                     <p>Precios sujetos a confirmación tras toma de medidas definitiva.</p>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding: 1rem; border-bottom: 2px solid #e2e8f0;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; padding: 2rem; border-bottom: 3px solid rgba(99, 102, 241, 0.3); background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border-radius: 12px;">
                     <div>
                         <h2 style="color: #2563eb;">CANOTEX</h2>
                         <p style="color: #64748b; font-size: 0.75rem;">Tel: 973235776 | info@canotex.es</p>
@@ -2013,7 +2054,7 @@ function mostrarOpcionesBarras() {
                     </div>
                 </div>
                 ${p.cliente_nombre ? `
-                <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+               <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid rgba(99, 102, 241, 0.2);">
                     <h3 style="font-size: 0.75rem; color: #64748b;">CLIENTE</h3>
                     <p style="font-weight: 600;">${p.cliente_nombre}</p>
                     ${p.cliente_telefono ? `<p style="font-size: 0.875rem;">${p.cliente_telefono}</p>` : ''}
@@ -2079,10 +2120,42 @@ function mostrarOpcionesBarras() {
             itemsActuales = [];
             actualizarItems();
             actualizarResumen();
+            editandoPresupuestoId = null;
         }
       
    
-
+function editarPresupuesto(id, event) {
+    event.stopPropagation();
+    
+    const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
+    const p = presupuestos.find(pr => pr.id === id);
+    if (!p) return;
+    
+    // Cargar datos del cliente
+    document.getElementById('cliente-nombre').value = p.cliente_nombre || '';
+    document.getElementById('cliente-telefono').value = p.cliente_telefono || '';
+    document.getElementById('cliente-email').value = p.cliente_email || '';
+    document.getElementById('cliente-direccion').value = p.cliente_direccion || '';
+    document.getElementById('notas').value = p.notas || '';
+    
+    // Cargar items
+    itemsActuales = p.items || [];
+    actualizarItems();
+    actualizarResumen();
+    
+    // Guardar ID del presupuesto en edición
+    editandoPresupuestoId = id;
+    
+    // Cambiar a vista de edición
+    mostrarVista('nuevo');
+    
+    // Cambiar texto del botón de guardar
+    const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
+    if (btnGuardar) {
+        btnGuardar.innerHTML = '💾 Actualizar Presupuesto';
+        btnGuardar.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+    }
+}
 
       
     
