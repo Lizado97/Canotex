@@ -369,10 +369,7 @@ z-index: inherit;
 
 .btn-hamburguesa { position: absolute; /* Cambiamos de fixed a absolute / top: 50%; left: 1.5rem; transform: translateY(-50%); / Lo centramos verticalmente respecto al header */ z-index: 998; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.3); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
 
-.btn-hamburguesa:hover {
-    background: rgba(99, 102, 241, 0.4);
-    transform: translateY(-50%) scale(1.05);
-}
+.btn-hamburguesa:hover { background: rgba(99, 102, 241, 0.4); transform: scale(1.05); }
 
 .btn-hamburguesa span { display: block; width: 25px; height: 2px; background: white; position: relative; }
 
@@ -1209,28 +1206,10 @@ body::before {
     const COLORES_TEJIDOS = {
 "AALBORG 60-61-64": ["60 Beige", "61 Gris", "64 Azul"],
 "AALBORG 90-91-94": ["90 Blanco", "91 Crema", "94 Verde"],
-"ABI": ["01 Blanco", "02 Crudo", "03 Beige", "04 Gris", "05 Azul", "06 Verde"],
-"ACHIRA": ["01 Natural", "02 Arena", "03 Piedra", "04 Gris"],
-"AKINA": ["01 Blanco", "02 Beige", "03 Gris", "04 Azul"],
-"ALIDA GRIS": ["Color único - Gris"],
-"ALISHA": ["01 Blanco", "02 Beige", "03 Gris"],
-"ANOUK GRIS": ["Color único - Gris"],
-"ASPEN BCO/CRUDO": ["Blanco", "Crudo"],
-"ASPEN LINO": ["Lino Natural"],
-"ASTIN GRIS": ["Color único - Gris"],
-"ELISE BCO/CRUDO": ["Blanco", "Crudo"],
-"ELISE LINO": ["Lino Natural"],
-"LINETTE BLACKOUT": ["01 Blanco", "02 Beige", "03 Gris", "04 Negro"],
-"MILAN BCO/CRUDO": ["Blanco", "Crudo"],
-"PROVENCAL AZUL": ["Color único - Azul"],
-"PROVENCAL GRIS": ["Color único - Gris"],
-"PROVENCAL ROJO": ["Color único - Rojo"],
-"RALPH BCO/CRUDO": ["Blanco", "Crudo"],
-"RALPH LINO": ["Lino Natural"],
-"YECLA 01-02-03": ["01 Beige", "02 Gris", "03 Azul"],
-"YECLA 11-12-13": ["11 Blanco", "12 Crema", "13 Arena"],
-"YECLA 41-42-43": ["41 Verde", "42 Azul", "43 Gris"],
-"YECLA 51-52-53": ["51 Rosa", "52 Lila", "53 Morado"],
+"ABI": ["01 Blanco", "02 Crudo", "03 Beige", "04 Gris"],
+"ACHIRA": ["01 Natural", "02 Arena", "03 Piedra"],
+// Agrega los colores de cada tejido aquí
+// Por defecto si no tiene colores:
 "default": ["Color único"]
 };
 
@@ -1440,7 +1419,7 @@ colores.forEach(color => {
 });
 
 document.getElementById('color-container').style.display = 'block';
-} document.addEventListener('click', function(e) { const searchBox = document.querySelector('.search-box'); if (searchBox && !searchBox.contains(e.target)) { const results = document.getElementById('search-results'); if (results) { results.classList.add('hidden'); } } });
+}
 
     function mostrarVista(vista) {
 document.getElementById('dashboard-view').classList.add('hidden');
@@ -1632,34 +1611,9 @@ document.getElementById('btn-texto').textContent = '✏️ Actualizar Item';
 
 editandoItemId = id;
 window.scrollTo({ top: 0, behavior: 'smooth' });
-} 
+} function actualizarItems() { const lista = document.getElementById('items-list'); const card = document.getElementById('items-card'); if (itemsActuales.length === 0) { card.style.display = 'none'; return; } card.style.display = 'block'; lista.innerHTML = ''; itemsActuales.forEach((item, index) => { const div = document.createElement('div'); div.className = 'item'; div.innerHTML = <div class="item-info"> <h4>#${index + 1} - ${item.descripcion}</h4> <p>Medidas: ${item.ancho}cm x ${item.alto}cm | Sistema: ${item.sistema_nombre}</p> </div> <div style="display: flex; gap: 0.5rem; align-items: center;"> <div class="item-price">${item.precio_total.toFixed(2)}€</div> <button class="btn" onclick="editarItem(${item.id})" style="background: #f59e0b; color: white; padding: 0.5rem 1rem;">✏️ Editar</button> <button class="btn btn-danger" onclick="eliminarItem(${item.id})">🗑️</button> </div> ; lista.appendChild(div); }); }
 
-function actualizarItems() {
-    const lista = document.getElementById('items-list');
-    const card = document.getElementById('items-card');
-    if (itemsActuales.length === 0) {
-        card.style.display = 'none';
-        return;
-    }
-    card.style.display = 'block';
-    lista.innerHTML = '';
-    itemsActuales.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-            <div class="item-info">
-                <h4>#${index + 1} - ${item.descripcion}</h4>
-                <p>Medidas: ${item.ancho}cm x ${item.alto}cm | Sistema: ${item.sistema_nombre}</p>
-            </div>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <div class="item-price">${item.precio_total.toFixed(2)}€</div>
-                <button class="btn" onclick="editarItem(${item.id})" style="background: #f59e0b; color: white; padding: 0.5rem 1rem;">✏️ Editar</button>
-                <button class="btn btn-danger" onclick="eliminarItem(${item.id})">🗑️</button>
-            </div>
-        `;
-        lista.appendChild(div);
-    });
-}  function actualizarResumen() {
+  function actualizarResumen() {
 const totalItems = itemsActuales.length;
 const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
 const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
@@ -1749,21 +1703,19 @@ mostrarVista('dashboard');
             return;
         }
 
-     presupuestos.reverse().forEach(p => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-        <td onclick="verDetalle('${p.id}')">${p.numero}</td>
-        <td onclick="verDetalle('${p.id}')">${p.cliente_nombre}</td>
-        <td onclick="verDetalle('${p.id}')">${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
-        <td onclick="verDetalle('${p.id}')">${p.items.length}</td>
-        <td onclick="verDetalle('${p.id}')" style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
-        <td style="text-align: center;">
-<button class="btn btn-primary" onclick="event.stopPropagation(); editarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
-<button class="btn btn-danger" onclick="event.stopPropagation(); eliminarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
-</td>
-    `;
-    tbody.appendChild(tr);
-});
+        presupuestos.reverse().forEach(p => {
+            const tr = document.createElement('tr');
+            tr.onclick = () => verDetalle(p.id);
+            tr.innerHTML = `
+                <td>${p.numero}</td>
+                <td>${p.cliente_nombre}</td>
+                <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
+                <td>${p.items.length}</td>
+                <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
+                <td style="text-align: center;">
+<button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+<button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
+</td> `; tbody.appendChild(tr); }); }
     function eliminarPresupuesto(id, event) {
 event.stopPropagation();
 if (confirm('¿Estás seguro de eliminar este presupuesto?')) {
@@ -1949,13 +1901,10 @@ filtrados.reverse().forEach(p => {
         <td>${p.items.length}</td>
         <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
        <td style="text-align: center;">
-<button class="btn btn-primary" onclick="event.stopPropagation(); editarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
-<button class="btn btn-primary" onclick="event.stopPropagation(); verDetalle('${p.id}');" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
-<button class="btn btn-danger" onclick="event.stopPropagation(); eliminarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem;">🗑️</button>
-</td>
-    `;
-    tbody.appendChild(tr);
-});
+<button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+<button class="btn btn-primary" onclick="verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
+<button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
+</td> `; tbody.appendChild(tr); }); }
 // Mostrar presupuestos del mes function mostrarPresupuestosDelMes() { const ahora = new Date(); const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1); const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0);
 
 document.getElementById('filtro-nombre').value = '';
@@ -2000,16 +1949,26 @@ conteoPorMes.forEach((valor, i) => {
     
     contenedor.appendChild(barra);
 });
-} function filtrarPorMes(mesIndex, anio) { const primerDia = new Date(anio, mesIndex, 1); const ultimoDia = new Date(anio, mesIndex + 1, 0);
+} function filtrarPorMes(mesIndex, anio) { const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
 
-document.getElementById('filtro-nombre').value = '';
-document.getElementById('filtro-numero').value = '';
-document.getElementById('filtro-fecha-desde').value = primerDia.toISOString().split('T')[0];
-document.getElementById('filtro-fecha-hasta').value = ultimoDia.toISOString().split('T')[0];
+// Filtrar los datos reales
+const filtrados = presupuestos.filter(p => {
+    const fecha = new Date(p.fecha);
+    return fecha.getMonth() === mesIndex && fecha.getFullYear() === anio;
+});
 
-mostrarVista('gestion');
-filtrarPresupuestos();
+if (filtrados.length === 0) {
+    alert("No hay presupuestos para este mes.");
+    return;
 }
+
+// Aquí llamamos a tu función de renderizar tabla (suponiendo que se llama renderizarTabla)
+// Y cambiamos a la vista donde está la tabla (suponiendo que es 'gestion')
+mostrarVista('gestion'); 
+actualizarTablaConFiltro(filtrados, `Presupuestos de ${obtenerNombreMesCompleto(mesIndex)}`);
+}
+
+// Función auxiliar para el título dinámico function obtenerNombreMesCompleto(index) { const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']; return meses[index]; }
 
 </script>
 </body> </html>
