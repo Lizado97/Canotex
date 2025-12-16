@@ -1157,6 +1157,7 @@
         <div id="search-results" class="search-results hidden"></div>
     </div>
     <input type="hidden" id="tejido">
+      <input type="hidden" id="tejido-color">
 </div>
 
 <div class="form-group" id="color-container" style="display: none;">
@@ -2124,17 +2125,26 @@ if (item.tejido_color) {
       function actualizarResumen() {
     const totalItems = itemsActuales.length;
     const subtotal = itemsActuales.reduce((sum, item) => sum + item.precio_total, 0);
-    const incluirInstalacion = document.getElementById('incluir-instalacion').checked;
-    const subtotalConInstalacion = subtotal;
+    const precioInstalacion = document.getElementById('incluir-instalacion').checked ? 50 : 0;
+    const subtotalConInstalacion = subtotal + precioInstalacion;
     const iva = subtotalConInstalacion * 0.21;
     const total = subtotalConInstalacion + iva;
 
     document.getElementById('total-items').textContent = totalItems;
-    document.getElementById('subtotal').textContent = subtotalConInstalacion.toFixed(2) + '€';
+    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + '€';
+    
+    // Mostrar/ocultar línea de instalación
+    const lineaInstalacion = document.getElementById('instalacion-line');
+    if (precioInstalacion > 0) {
+        lineaInstalacion.style.display = 'flex';
+        document.getElementById('instalacion-precio').textContent = precioInstalacion.toFixed(2) + '€';
+    } else {
+        lineaInstalacion.style.display = 'none';
+    }
+    
     document.getElementById('iva').textContent = iva.toFixed(2) + '€';
     document.getElementById('total').textContent = total.toFixed(2) + '€';
 }
-
       function guardarPresupuesto() {
     const nombre = document.getElementById('cliente-nombre').value;
     if (!nombre) {
@@ -2190,7 +2200,15 @@ if (item.tejido_color) {
         localStorage.setItem('presupuestos', JSON.stringify(presupuestos));
         alert('✅ Presupuesto guardado correctamente');
     }
-    
+    // Resetear botón
+const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
+if (btnGuardar) {
+    btnGuardar.innerHTML = '💾 Guardar Presupuesto';
+    btnGuardar.style.background = 'white';
+    btnGuardar.style.color = '#2563eb';
+}
+
+limpiarFormulario();
     mostrarVista('dashboard');
 }
         function guardarBorrador() {
