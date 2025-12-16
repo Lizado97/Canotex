@@ -347,61 +347,61 @@ z-index: inherit;
     }
   
   /* Menú lateral */
-.menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; display: none; }
+.menu-overlay { posición: fija; superior: 0; izquierda: 0; ancho: 100%; alto: 100%; fondo: rgba(0, 0, 0, 0.5); índice z: 999; visualización: ninguna; }
 
-.menu-overlay.active { display: block; }
+.menu-overlay.active { mostrar: bloque; }
 
-.menu-lateral { position: fixed; top: 0; left: -350px; width: 350px; height: 100%; background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%); backdrop-filter: blur(10px); border-right: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5); transition: left 0.3s ease; z-index: 1000; display: flex; flex-direction: column; }
+.menu-lateral { posición: fija; superior: 0; izquierda: -350px; ancho: 350px; alto: 100%; fondo: degradado lineal (180 grados, #1e1b4b 0%, #312e81 100%); filtro de fondo: desenfoque (10px); borde derecho: 1px sólido rgba (255, 255, 255, 0.1); sombra de caja: 4px 0 20px rgba (0, 0, 0, 0.5); transición: izquierda 0.3s facilidad; índice z: 1000; pantalla: flexible; dirección flexible: columna; }
 
-.menu-lateral.active { left: 0; }
+.menu-lateral.active { izquierda: 0; }
 
-.menu-header { padding: 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.menu-header { relleno: 2rem; borde inferior: 1px sólido rgba(255, 255, 255, 0.1); }
 
-.menu-header h2 { color: #e2e8f0; font-size: 1.5rem; background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.menu-header h2 { color: #e2e8f0; tamaño de fuente: 1.5rem; fondo: gradiente lineal (135 grados, #60a5fa 0%, #a78bfa 100%); -webkit-background-clip: texto; -webkit-text-fill-color: transparente; }
 
-.menu-content { flex: 1; padding: 1.5rem; overflow-y: auto; }
+.menu-content { flex: 1; relleno: 1.5rem; desbordamiento-y: automático; }
 
-.menu-item { padding: 1rem 1.5rem; margin-bottom: 0.5rem; border-radius: 12px; color: #e2e8f0; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 1rem; }
+.menu-item { relleno: 1rem 1.5rem; margen inferior: 0.5rem; radio del borde: 12px; color: #e2e8f0; cursor: puntero; transición: todo 0.3s; visualización: flex; alinear elementos: centro; espacio: 1rem; }
 
-.menu-item:hover { background: rgba(99, 102, 241, 0.2); }
+.menu-item:hover { fondo: rgba(99, 102, 241, 0.2); }
 
-.menu-footer { padding: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 0.75rem; }
+.menu-footer { relleno: 1.5rem; borde superior: 1px sólido rgba(255, 255, 255, 0.1); pantalla: flex; dirección flexible: columna; espacio: 0.75rem; }
 
 .btn-hamburguesa { position: absolute; /* Cambiamos de fixed a absolute / top: 50%; left: 1.5rem; transform: translateY(-50%); / Lo centramos verticalmente respecto al header */ z-index: 998; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.3); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
 
-.btn-hamburguesa:hover { background: rgba(99, 102, 241, 0.4); transform: scale(1.05); }
+.btn-hamburguesa:hover { fondo: rgba(99, 102, 241, 0.4); transformar: escala(1.05); }
 
 .btn-hamburguesa span { display: block; width: 25px; height: 2px; background: white; position: relative; }
 
-.btn-hamburguesa span::before, .btn-hamburguesa span::after { content: ''; position: absolute; width: 25px; height: 2px; background: white; left: 0; }
+.btn-hamburguesa span::before, .btn-hamburguesa span::after { contenido: ''; posición: absoluta; ancho: 25px; alto: 2px; fondo: blanco; izquierda: 0; }
 
 .btn-hamburguesa span::before { top: -8px; }
 
 .btn-hamburguesa span::after { top: 8px; } /* --- ESTILO DEL PRESUPUESTO FINAL (DOCUMENTO) --- */ .presupuesto-documento { background: white; color: #1e293b; padding: 40px; border-radius: 8px; max-width: 850px; margin: 0 auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 
-.doc-header { display: flex; justify-content: space-between; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 30px; }
+.doc-header { display: flex; justify-content: espacio-entre; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 30px; }
 
-.doc-logo h1 { color: #2563eb; margin: 0; font-size: 2rem; }
+.doc-logo h1 { color: #2563eb; margen: 0; tamaño de fuente: 2rem; }
 
-.doc-info-meta { text-align: right; }
+.doc-info-meta { alineación del texto: derecha; }
 
-.doc-info-meta h2 { margin: 0; color: #64748b; font-size: 1.2rem; }
+.doc-info-meta h2 { margen: 0; color: #64748b; tamaño de fuente: 1.2rem; }
 
-.doc-cliente-box { background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+.doc-cliente-box { fondo: #f8fafc; relleno: 20px; radio del borde: 8px; margen inferior: 30px; }
 
-.doc-tabla { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+.doc-tabla { ancho: 100%; borde-colapsado: colapsar; margen-inferior: 30px; }
 
-.doc-tabla th { background: #2563eb; color: white; padding: 12px; text-align: left; }
+.doc-tabla th { fondo: #2563eb; color: blanco; relleno: 12px; alineación del texto: izquierda; }
 
-.doc-tabla td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
+.doc-tabla td { relleno: 12px; borde inferior: 1px sólido #e2e8f0; }
 
-.doc-totales { margin-left: auto; width: 300px; }
+.doc-totales { margen izquierdo: automático; ancho: 300px; }
 
-.total-fila { display: flex; justify-content: space-between; padding: 8px 0; }
+.total-fila { display: flex; justify-content: espacio-entre; padding: 8px 0; }
 
-.total-fila.final { border-top: 2px solid #2563eb; font-weight: bold; font-size: 1.3rem; color: #2563eb; margin-top: 10px; }
+.total-fila.final { borde superior: 2px sólido #2563eb; peso de fuente: negrita; tamaño de fuente: 1.3rem; color: #2563eb; margen superior: 10px; }
 
-/* --- REGLAS DE IMPRESIÓN --- / @media print { body * { visibility: hidden; / Oculta todo / } #detalle-content, #detalle-content * { visibility: visible; / Solo muestra el contenido del presupuesto */ } #detalle-content { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; box-shadow: none; } .hidden-print { display: none !important; } }
+/* --- REGLAS DE IMPRESIÓN --- / @media print { body * { visibilidad: oculta; / Oculta todo / } #detalle-content, #detalle-content * { visibilidad: visible; / Solo muestra el contenido del presupuesto */ } #detalle-content { posición: absoluta; izquierda: 0; arriba: 0; ancho: 100%; fondo: blanco; relleno: 0; sombra de cuadro: ninguna; } .hidden-print { mostrar: ninguno !importante; } }
 
 /* Vista Gestión */ .filtros-gestion { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
 
@@ -409,17 +409,17 @@ z-index: inherit;
 
 .grafica-barras { display: flex; align-items: flex-end; justify-content: space-around; height: 350px; padding: 2rem; border-bottom: 3px solid rgba(99, 102, 241, 0.3); background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%); border-radius: 12px; }
 
-/* El color de la barra (barra) ya está bien (degradado azul/morado) / .barra { flex: 1; margin: 0 3px; / Reducimos el margen entre barras / background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%); border-radius: 6px 6px 0 0; position: relative; min-height: 5px; / Altura mínima por si no hay datos */ transition: transform 0.2s ease, filter 0.2s ease; }
+/* El color de la barra (barra) ya está bien (degradado azul/morado) / .barra { flex: 1; margen: 0 3px; / Reducimos el margen entre barras / background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%); radio de borde: 6px 6px 0 0; posición: relativa; altura mínima: 5px; / Altura mínima por si no hay datos */ transición: transformar 0.2s facilidad, filtrar 0.2s facilidad; }
 
-.barra:hover { transform: scaleX(1.1); /* Se ensancha un poco / filter: brightness(1.3); / Brilla más / z-index: 10; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); } .barra:active { transform: scale(0.95); / Efecto de pulsación */ }
+.barra:hover { transformar: escalaX(1.1); /* Se ensancha un poco / filter: brillo(1.3); / Brilla más / índice z: 10; sombra de cuadro: 0 4px 15px rgba(99, 102, 241, 0.4); } .barra:active { transformar: escala(0,95); / Efecto de pulsación */ }
 
-.barra-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; /* Texto un poco más pequeño para que quepan los 12 */ color: #cbd5e1; }
+.barra-label { posición: absoluta; abajo: -25px; izquierda: 50%; transformar: traducirX(-50%); tamaño de fuente: 0,65 rem; /* Texto un poco más pequeño para quepan los 12 */ color: #cbd5e1; }
 
-.barra-valor { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-weight: bold; color: #e2e8f0; /* Hacemos los valores de arriba blancos o muy claros */ }
+.barra-valor { posición: absoluta; arriba: -25px; izquierda: 50%; transformar: traducirX(-50%); peso de fuente: negrita; color: #e2e8f0; /* Hacemos los valores de arriba blancos o muy claros */ }
 
-.stat-card.clickable { cursor: pointer; transition: all 0.3s; }
+.stat-card.clickable { cursor: puntero; transición: todos 0.3s; }
 
-.stat-card.clickable:hover { transform: translateY(-5px); box-shadow: 0 12px 40px 0 rgba(99, 102, 241, 0.4); }
+.stat-card.clickable:hover { transformar: translateY(-5px); sombra de caja: 0 12px 40px 0 rgba(99, 102, 241, 0.4); }
 
     .checkbox-container {
         display: flex;
@@ -519,14 +519,14 @@ overflow: visible !important;
 position: relative;
 }
 
-.step-blue { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(99, 102, 241, 0.3); }
+.step-blue { fondo: gradiente lineal (135 grados, rgba (59, 130, 246, 0.1) 0%, rgba (99, 102, 241, 0.1) 100%); color del borde: rgba (99, 102, 241, 0.3); }
 
   .step-purple {
 background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(167, 139, 250, 0.1) 100%);
 border-color: rgba(167, 139, 250, 0.3);
 }
 
-.step-amber { background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%); border-color: rgba(251, 191, 36, 0.3); } .step-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.step-amber { fondo: gradiente lineal (135 grados, rgba (251, 191, 36, 0.1) 0%, rgba (245, 158, 11, 0.1) 100%); color del borde: rgba (251, 191, 36, 0.3); } .step-header { pantalla: flex; alinear elementos: centro; espacio: 1rem; margen inferior: 1.5rem; }
 
     .step-number {
         width: 40px;
@@ -559,14 +559,14 @@ border-color: rgba(167, 139, 250, 0.3);
         font-weight: 700;
         color: #e2e8f0;
     }
-@media (max-width: 768px) { .header { padding: 4rem 1.25rem 1.25rem 1.25rem; /* En móvil, ponemos el botón arriba del todo */ flex-direction: column; text-align: center; }
+@media (ancho máximo: 768 px) { .header { relleno: 4rem 1,25rem 1,25rem 1,25rem; /* En móvil, ponemos el botón arriba del todo */ flex-direction: column; alineación de texto: centro; }
 
 .btn-hamburguesa {
     top: 1rem;
     left: 50%;
     transform: translateX(-50%); /* Centrado horizontal en móvil */
 }
-} .header h1 { font-size: 1.25rem; }
+} .header h1 { tamaño de fuente: 1.25rem; }
 
         .btn {
             padding: 0.625rem 1rem;
@@ -603,7 +603,7 @@ border-color: rgba(167, 139, 250, 0.3);
             margin-right: 0;
         }
     }
-@media print { body { background: white; color: #000 !important; }
+@media print { cuerpo { fondo: blanco; color: #000 !importante; }
 
 body::before {
     display: none;
@@ -648,7 +648,7 @@ body::before {
         color: #e2e8f0;
     }
 </style>
-</head> <body>
+</cabeza> <cuerpo>
 <div id="main-app-content">
 
     <div id="app-content">
@@ -790,14 +790,16 @@ body::before {
                             </div>
 
                             <div class="form-group" style="z-index: 10000; position: relative;">
-<label>Tejido * <small>(Buscar por nombre)</small></label>
-<div class="search-box">
-    <input type="text" id="tejido-search" placeholder="Buscar tejido..."
-        oninput="buscarTejido()">
-    <div id="search-results" class="search-results hidden"></div>
-</div>
-<input type="hidden" id="tejido">
-</div> <div class="form-group" id="color-container" style="display: none;"> <label>Color del Tejido *</label> <select id="tejido-color"> <option value="">Selecciona el color...</option> </select> </div> </div>
+                                <label>Tejido * <small>(Buscar por nombre)</small></label>
+                                <div class="search-box">
+                                    <input type="text" id="tejido-search" placeholder="Buscar tejido..."
+                                        oninput="buscarTejido()">
+                                    <div id="search-results" class="search-results hidden"></div>
+                                </div>
+                                <input type="hidden" id="tejido">
+                            </div>
+                        </div>
+
                         <div class="step-box step-blue">
                             <div class="step-header">
                                 <div class="step-number">2</div>
@@ -926,7 +928,7 @@ body::before {
                 </div>
                <button class="btn btn-primary hidden-print" onclick="window.print()">
 🖨️ Imprimir Presupuesto
-</button> </div>
+</botón> </div>
             <div class="card" id="detalle-content"></div>
         </div>
 
@@ -1203,15 +1205,6 @@ body::before {
         { nombre: "YECLA 51-52-53", precio: 47.88, ancho: 300, composicion: "50% Pes 50% Li" },
         { nombre: "ZAHARA", precio: 41.11, ancho: 300, composicion: "90% Pol 10% Li" }
     ];
-    const COLORES_TEJIDOS = {
-"AALBORG 60-61-64": ["60 Beige", "61 Gris", "64 Azul"],
-"AALBORG 90-91-94": ["90 Blanco", "91 Crema", "94 Verde"],
-"ABI": ["01 Blanco", "02 Crudo", "03 Beige", "04 Gris"],
-"ACHIRA": ["01 Natural", "02 Arena", "03 Piedra"],
-// Agrega los colores de cada tejido aquí
-// Por defecto si no tiene colores:
-"default": ["Color único"]
-};
 
    const SISTEMAS = {
 "Estor a Cadena - Paquetto": {75:52.20, 100:57.38, 125:67.80, 150:77.19, 175:79.18, 200:88.61, 225:103.04, 250:107.97, 275:117.27, 300:126.66},
@@ -1279,7 +1272,7 @@ const select = document.getElementById('tipo-cortina');
 select.addEventListener('change', filtrarSistemasPorTipo);
 }
 
-function filtrarSistemasPorTipo() { const tipo = document.getElementById('tipo-cortina').value; const selectSistema = document.getElementById('sistema'); selectSistema.innerHTML = '<option value="">Sin sistema</option>';
+function filtrarSistemasPorTipo() { const tipo = document.getElementById('tipo-cortina').value; const selectSistema = document.getElementById('sistema'); selectSistema.innerHTML = ' <option value=""> Sin sistema </option> ';
 
 let sistemasPermitidos = [];
 
@@ -1302,7 +1295,7 @@ sistemasPermitidos.forEach(s => {
 });
 }
 
-function mostrarOpcionesBarras() { const sistema = document.getElementById('sistema').value; const opcionesBarras = document.getElementById('opciones-barras'); const diametroContainer = document.getElementById('diametro-container'); const selectMedida = document.getElementById('medida-barra');
+function mostrarOpcionesBarras() { const sistema = document.getElementById('sistema').value; const opcionesBarras = document.getElementById('opciones-barras'); const diametroContainer = document.getElementById('diametro-contenedor'); const selectMedida = document.getElementById('medida-barra');
 
 if (SISTEMAS[sistema] === 'forja') {
     opcionesBarras.style.display = 'block';
@@ -1401,25 +1394,21 @@ return sistema[rangoAplicable || rangoMaximo] || 0;
         searchResults.classList.remove('hidden');
     }
 
- function seleccionarTejido(nombre) {
-document.getElementById('tejido-search').value = nombre;
-document.getElementById('tejido').value = nombre;
-document.getElementById('search-results').classList.add('hidden');
+    function seleccionarTejido(nombre) {
+        document.getElementById('tejido-search').value = nombre;
+        document.getElementById('tejido').value = nombre;
+        document.getElementById('search-results').classList.add('hidden');
+    }
 
-// Cargar colores del tejido
-const colores = COLORES_TEJIDOS[nombre] || COLORES_TEJIDOS["default"];
-const selectColor = document.getElementById('tejido-color');
-selectColor.innerHTML = '<option value="">Selecciona el color...</option>';
-
-colores.forEach(color => {
-    const option = document.createElement('option');
-    option.value = color;
-    option.textContent = color;
-    selectColor.appendChild(option);
-});
-
-document.getElementById('color-container').style.display = 'block';
-}
+    document.addEventListener('click', function(e) {
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox && !searchBox.contains(e.target)) {
+            const results = document.getElementById('search-results');
+            if (results) {
+                results.classList.add('hidden');
+            }
+        }
+    });
 
     function mostrarVista(vista) {
 document.getElementById('dashboard-view').classList.add('hidden');
@@ -1431,14 +1420,31 @@ document.getElementById('grafica-view').classList.add('hidden');
 if (vista === 'dashboard') {
     document.getElementById('dashboard-view').classList.remove('hidden');
     cargarDashboard();
-} else if (vista === 'nuevo') { document.getElementById('nuevo-view').classList.remove('hidden'); if (!editandoPresupuestoId) { limpiarFormulario(); } const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]'); if (btnGuardar && !editandoPresupuestoId) { btnGuardar.innerHTML = '💾 Guardar Presupuesto'; btnGuardar.style.background = 'white'; btnGuardar.style.color = '#2563eb'; } } else if (vista === 'detalle') { document.getElementById('detalle-view').classList.remove('hidden'); } else if (vista === 'gestion') { document.getElementById('gestion-view').classList.remove('hidden'); cargarGestion(); } else if (vista === 'grafica') { document.getElementById('grafica-view').classList.remove('hidden'); cargarGraficaMensual(); } }
+} else if (vista === 'nuevo') {
+document.getElementById('nuevo-view').classList.remove('hidden');
+limpiarFormulario();
+const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
+if (btnGuardar) {
+    btnGuardar.innerHTML = '💾 Guardar Presupuesto';
+    btnGuardar.style.background = 'white';
+    btnGuardar.style.color = '#2563eb';
+}
+} else if (vista === 'detalle') {
+    document.getElementById('detalle-view').classList.remove('hidden');
+} else if (vista === 'gestion') {
+    document.getElementById('gestion-view').classList.remove('hidden');
+    cargarGestion();
+} else if (vista === 'grafica') {
+    document.getElementById('grafica-view').classList.remove('hidden');
+    cargarGraficaMensual();
+}
+}
 
     function agregarItem() {
 const tipo = document.getElementById('tipo-cortina').value;
 const ancho = parseFloat(document.getElementById('ancho').value);
 const alto = parseFloat(document.getElementById('alto').value);
 const tejidoNombre = document.getElementById('tejido').value;
-const tejidoColor = document.getElementById('tejido-color').value;        
 const sistemaNombre = document.getElementById('sistema').value;  // ← FALTABA ESTO
 
 let sistemaNombreCompleto = sistemaNombre || 'Sin sistema';
@@ -1456,7 +1462,11 @@ if (sistemaNombre && SISTEMAS[sistemaNombre] === 'forja') {
 }
 
 const dosPiezas = document.getElementById('dos-piezas').checked;
-if (!tipo || !ancho || !alto || !tejidoNombre || !tejidoColor) { alert('Por favor completa todos los campos obligatorios (incluido el color del tejido)'); return; }
+
+if (!tipo || !ancho || !alto || !tejidoNombre) {
+    alert('Por favor completa todos los campos obligatorios');
+    return;
+}
 
 const tejido = TEJIDOS.find(t => t.nombre === tejidoNombre);
 const anchoParaTejido = dosPiezas ? ancho / 2 : ancho;
@@ -1521,11 +1531,10 @@ const precioTotal =
     precioOllados + 
     precioInstalacion;
 
-    const item = {
+const item = {
     id: editandoItemId || Date.now(),
     tipo,
-    descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre} (${tejidoColor})${dosPiezas ? ' (2 piezas)' : ''}`,
-    tejido_color: tejidoColor,
+    descripcion: `${TIPOS_NOMBRE[tipo]} - ${tejidoNombre}${dosPiezas ? ' (2 piezas)' : ''}`,
     ancho, alto,
     tejido_nombre: tejidoNombre,
     sistema_nombre: sistemaNombreCompleto,
@@ -1550,8 +1559,6 @@ document.getElementById('ancho').value = '';
 document.getElementById('alto').value = '';
 document.getElementById('tejido').value = '';
 document.getElementById('tejido-search').value = '';
-document.getElementById('tejido-color').value = '';
-document.getElementById('color-container').style.display = 'none';
 document.getElementById('sistema').value = '';
 document.getElementById('dos-piezas').checked = false;
 }
@@ -1571,8 +1578,6 @@ document.getElementById('ancho').value = item.ancho;
 document.getElementById('alto').value = item.alto;
 document.getElementById('tejido').value = item.tejido_nombre;
 document.getElementById('tejido-search').value = item.tejido_nombre;
-        // Cargar color
-if (item.tejido_color) { seleccionarTejido(item.tejido_nombre); document.getElementById('tejido-color').value = item.tejido_color; }
 
 // Manejar sistema - detectar si es barra de forja
 const sistemaNombreBase = item.sistema_nombre.split(' ')[0] + ' ' + item.sistema_nombre.split(' ')[1] + ' ' + item.sistema_nombre.split(' ')[2];
@@ -1805,35 +1810,24 @@ if (confirm('¿Estás seguro de eliminar este presupuesto?')) {
     }
 
     function limpiarFormulario() {
-document.getElementById('cliente-nombre').value = '';
-document.getElementById('cliente-telefono').value = '';
-document.getElementById('cliente-email').value = '';
-document.getElementById('cliente-direccion').value = '';
-document.getElementById('notas').value = '';
-document.getElementById('incluir-instalacion').checked = false;
-document.getElementById('btn-texto').textContent = '➕ Agregar al Presupuesto';
-itemsActuales = [];
-editandoItemId = null;
-editandoPresupuestoId = null;
-actualizarItems();
-actualizarResumen();
-}
-
-function editarPresupuesto(id, event) { event.stopPropagation();
+        document.getElementById('cliente-nombre').value = '';
+        document.getElementById('cliente-telefono').value = '';
+        document.getElementById('cliente-email').value = '';
+        document.getElementById('cliente-direccion').value = '';
+        document.getElementById('notas').value = '';
+        document.getElementById('incluir-instalacion').checked = false;
+        document.getElementById('btn-texto').textContent = '➕ Calcular y Agregar al Presupuesto';
+        itemsActuales = [];
+        actualizarItems();
+        actualizarResumen();
+        editandoPresupuestoId = null;
+    }
+  
+función editarPresupuesto(id, evento) { evento.stopPropagation();
 
 const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]');
 const p = presupuestos.find(pr => pr.id === id);
 if (!p) return;
-
-// Primero establecemos el ID de edición ANTES de cambiar vista
-editandoPresupuestoId = id;
-
-// Cambiar vistas manualmente SIN llamar a mostrarVista para evitar limpiarFormulario
-document.getElementById('dashboard-view').classList.add('hidden');
-document.getElementById('gestion-view').classList.add('hidden');
-document.getElementById('detalle-view').classList.add('hidden');
-document.getElementById('grafica-view').classList.add('hidden');
-document.getElementById('nuevo-view').classList.remove('hidden');
 
 // Cargar datos del cliente
 document.getElementById('cliente-nombre').value = p.cliente_nombre || '';
@@ -1845,18 +1839,23 @@ document.getElementById('notas').value = p.notas || '';
 // Cargar items CON toda su información
 itemsActuales = (p.items || []).map(item => ({
     ...item,
-    id: item.id || Date.now() + Math.random()
+    id: item.id || Date.now() + Math.random() // Asegurar que tenga ID
 }));
 
 actualizarItems();
 actualizarResumen();
+
+// Guardar ID del presupuesto en edición
+editandoPresupuestoId = id;
+
+// Cambiar a vista de edición
+mostrarVista('nuevo');
 
 // Cambiar texto del botón de guardar
 const btnGuardar = document.querySelector('button[onclick="guardarPresupuesto()"]');
 if (btnGuardar) {
     btnGuardar.innerHTML = '💾 Actualizar Presupuesto';
     btnGuardar.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
-    btnGuardar.style.color = 'white';
 }
 
 // Scroll al inicio
@@ -1864,7 +1863,7 @@ window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
   // Funciones del Menú
-function toggleMenu() { document.getElementById('menu-lateral').classList.toggle('active'); document.getElementById('menu-overlay').classList.toggle('active'); }
+función toggleMenu() { document.getElementById('menu-lateral').classList.toggle('activo'); document.getElementById('menu-overlay').classList.toggle('activo'); }
 
 function enviarEmailAyuda() { window.location.href = 'mailto:info@canotex.es?subject=Solicitud de Ayuda&body=Hola, necesito ayuda con...'; }
 
@@ -1905,7 +1904,7 @@ filtrados.reverse().forEach(p => {
 <button class="btn btn-primary" onclick="verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
 <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
 </td> `; tbody.appendChild(tr); }); }
-// Mostrar presupuestos del mes function mostrarPresupuestosDelMes() { const ahora = new Date(); const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1); const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0);
+// Mostrar presupuestos del mes function mostrarPresupuestosDelMes() { const ahora = new Date(); const primerDia = new Fecha(ahora.getFullYear(), ahora.getMonth(), 1); const ultimoDia = new Fecha(ahora.getFullYear(), ahora.getMonth() + 1, 0);
 
 document.getElementById('filtro-nombre').value = '';
 document.getElementById('filtro-numero').value = '';
@@ -1915,9 +1914,9 @@ document.getElementById('filtro-fecha-hasta').value = ultimoDia.toISOString().sp
 mostrarVista('gestion');
 }
 
-// Función para mostrar la vista y cargar los datos function mostrarGraficaMensual() { mostrarVista('grafica'); // Asegúrate de que el ID coincida (grafica o grafica-view) cargarGraficaMensual(); }
+// Función para mostrar la vista y cargar los datos function mostrarGraficaMensual() { mostrarVista('grafica'); // Asegúrate de que el ID coincida (gráfica o gráfica-view) cargarGraficaMensual(); }
 
-function cargarGraficaMensual() { const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]'); const nombresMeses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']; const anioActual = new Date().getFullYear();
+function cargarGraficaMensual() { const presupuestos = JSON.parse(localStorage.getItem('presupuestos') || '[]'); const nombresMeses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']; const anioActual = nueva Fecha().getFullYear();
 
 const conteoPorMes = new Array(12).fill(0);
 
@@ -1968,7 +1967,7 @@ mostrarVista('gestion');
 actualizarTablaConFiltro(filtrados, `Presupuestos de ${obtenerNombreMesCompleto(mesIndex)}`);
 }
 
-// Función auxiliar para el título dinámico function obtenerNombreMesCompleto(index) { const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']; return meses[index]; }
+// Función auxiliar para obtener el título dinámico functionNombreMesCompleto(index) { const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']; devolver meses[índice]; }
 
 </script>
-</body> </html>
+</cuerpo> </html>
