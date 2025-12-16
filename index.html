@@ -1992,14 +1992,13 @@ document.addEventListener('DOMContentLoaded', () => {
         precioOllados = numOllados * 5.5;
     }
 
-    const precioInstalacion = document.getElementById('incluir-instalacion').checked ? 50 : 0;
+    
 
     const precioTotal = 
         precioTejidoFinal + 
         precioConfeccionFinal + 
         precioSistema + 
-        precioOllados + 
-        precioInstalacion;
+        precioOllados ;
 
         const item = {
         id: editandoItemId || Date.now(),
