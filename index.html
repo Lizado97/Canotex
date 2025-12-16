@@ -2261,17 +2261,17 @@ function cargarBorrador() {
             presupuestos.reverse().forEach(p => {
                 const tr = document.createElement('tr');
                 tr.onclick = () => verDetalle(p.id);
-                tr.innerHTML = `
-                    <td>${p.numero}</td>
-                    <td>${p.cliente_nombre}</td>
-                    <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
-                    <td>${p.items.length}</td>
-                    <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
-                    <td style="text-align: center;">
-    <button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
-    <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
-</td>
-                `;
+               tr.innerHTML = `
+    <td>${p.numero}</td>
+    <td>${p.cliente_nombre}</td>
+    <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
+    <td>${p.items.length}</td>
+    <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
+    <td style="text-align: center;" onclick="event.stopPropagation()">
+        <button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+        <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
+    </td>
+`;
                 tbody.appendChild(tr);
             });
         }
@@ -2471,17 +2471,17 @@ function filtrarPresupuestos() {
     filtrados.reverse().forEach(p => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${p.numero}</td>
-            <td>${p.cliente_nombre}</td>
-            <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
-            <td>${p.items.length}</td>
-            <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
-           <td style="text-align: center;">
-    <button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
-    <button class="btn btn-primary" onclick="verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
-    <button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
-</td>
-        `;
+    <td>${p.numero}</td>
+    <td>${p.cliente_nombre}</td>
+    <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
+    <td>${p.items.length}</td>
+    <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
+    <td style="text-align: center;">
+        <button class="btn btn-primary" onclick="event.stopPropagation(); editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+        <button class="btn btn-primary" onclick="event.stopPropagation(); verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
+        <button class="btn btn-danger" onclick="event.stopPropagation(); eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
+    </td>
+`;
         tbody.appendChild(tr);
     });
 }
