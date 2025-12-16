@@ -369,7 +369,10 @@ z-index: inherit;
 
 .btn-hamburguesa { position: absolute; /* Cambiamos de fixed a absolute / top: 50%; left: 1.5rem; transform: translateY(-50%); / Lo centramos verticalmente respecto al header */ z-index: 998; background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.3); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
 
-.btn-hamburguesa:hover { background: rgba(99, 102, 241, 0.4); transform: scale(1.05); }
+.btn-hamburguesa:hover {
+    background: rgba(99, 102, 241, 0.4);
+    transform: translateY(-50%) scale(1.05);
+}
 
 .btn-hamburguesa span { display: block; width: 25px; height: 2px; background: white; position: relative; }
 
@@ -1746,19 +1749,21 @@ mostrarVista('dashboard');
             return;
         }
 
-        presupuestos.reverse().forEach(p => {
-            const tr = document.createElement('tr');
-            tr.onclick = () => verDetalle(p.id);
-            tr.innerHTML = `
-                <td>${p.numero}</td>
-                <td>${p.cliente_nombre}</td>
-                <td>${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
-                <td>${p.items.length}</td>
-                <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
-                <td style="text-align: center;">
-<button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
-<button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
-</td> `; tbody.appendChild(tr); }); }
+     presupuestos.reverse().forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td onclick="verDetalle('${p.id}')">${p.numero}</td>
+        <td onclick="verDetalle('${p.id}')">${p.cliente_nombre}</td>
+        <td onclick="verDetalle('${p.id}')">${new Date(p.fecha).toLocaleDateString('es-ES')}</td>
+        <td onclick="verDetalle('${p.id}')">${p.items.length}</td>
+        <td onclick="verDetalle('${p.id}')" style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
+        <td style="text-align: center;">
+<button class="btn btn-primary" onclick="event.stopPropagation(); editarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+<button class="btn btn-danger" onclick="event.stopPropagation(); eliminarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem;">🗑️ Eliminar</button>
+</td>
+    `;
+    tbody.appendChild(tr);
+});
     function eliminarPresupuesto(id, event) {
 event.stopPropagation();
 if (confirm('¿Estás seguro de eliminar este presupuesto?')) {
@@ -1944,10 +1949,13 @@ filtrados.reverse().forEach(p => {
         <td>${p.items.length}</td>
         <td style="text-align: right; font-weight: bold;">${p.total_con_iva.toFixed(2)}€</td>
        <td style="text-align: center;">
-<button class="btn btn-primary" onclick="editarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
-<button class="btn btn-primary" onclick="verDetalle('${p.id}')" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
-<button class="btn btn-danger" onclick="eliminarPresupuesto('${p.id}', event)" style="padding: 0.5rem 1rem;">🗑️</button>
-</td> `; tbody.appendChild(tr); }); }
+<button class="btn btn-primary" onclick="event.stopPropagation(); editarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">✏️ Editar</button>
+<button class="btn btn-primary" onclick="event.stopPropagation(); verDetalle('${p.id}');" style="padding: 0.5rem 1rem; margin-right: 0.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">👁️ Ver</button>
+<button class="btn btn-danger" onclick="event.stopPropagation(); eliminarPresupuesto('${p.id}', event);" style="padding: 0.5rem 1rem;">🗑️</button>
+</td>
+    `;
+    tbody.appendChild(tr);
+});
 // Mostrar presupuestos del mes function mostrarPresupuestosDelMes() { const ahora = new Date(); const primerDia = new Date(ahora.getFullYear(), ahora.getMonth(), 1); const ultimoDia = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0);
 
 document.getElementById('filtro-nombre').value = '';
