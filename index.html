@@ -3031,7 +3031,7 @@ Presupuesto solicitado:
 • Fecha: ${new Date(p.fecha).toLocaleDateString('es-ES')}
 • Total: ${p.total_con_iva.toFixed(2)}€ (IVA incluido)
 
-Por favor, adjunta manualmente el archivo PDF que se acaba de descargar: "${nombreArchivo}"
+Por favor, adjunta manualmente el archivo PDF que se acaba de descargar: "${nombreArchivo}";
 
                     
                     window.location.href = `mailto:info@canotex.es?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
