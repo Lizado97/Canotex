@@ -3024,7 +3024,7 @@
                     const asunto = `Presupuesto ${p.numero} - ${p.cliente_nombre}`;
                     const cuerpo = `Estimado/a,
 
-Adjunto encontrarás el presupuesto solicitado:
+Presupuesto solicitado:
 
 • Presupuesto Nº: ${p.numero}
 • Cliente: ${p.cliente_nombre}
@@ -3033,11 +3033,6 @@ Adjunto encontrarás el presupuesto solicitado:
 
 Por favor, adjunta manualmente el archivo PDF que se acaba de descargar: "${nombreArchivo}"
 
-Quedamos a tu disposición para cualquier consulta.
-
-Saludos,
-Canotex Textil S.L.
-Tel: 973235776`;
                     
                     window.location.href = `mailto:info@canotex.es?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
                     
